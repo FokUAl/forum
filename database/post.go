@@ -27,13 +27,13 @@ func (post *Post) Delete() (err error) {
 
 func GetPost(id int) (post Post, err error) {
 	post = Post{}
-	err = database.QueryRow("select id, content, author from posts where id = $1",
+	err = database.QueryRow("SELECT id, content, author FROM posts WHERE id = $1",
 		id).Scan(&post.Id, &post.Message, &post.Author)
 	return
 }
 
 func (post *Post) Update() (err error) {
-	_, err = database.Exec("update posts set content = $2, author = $3 where id = $1",
+	_, err = database.Exec("UPDATE posts SET message = $2, author = $3 WHERE id = $1",
 		post.Id, post.Message, post.Author)
 	return
 }
