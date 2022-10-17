@@ -10,25 +10,33 @@ var database *sql.DB
 
 func Init() {
 	var err error
-	database, err = sql.Open("sqlite3", "./forum.db")
+	database, err = sql.Open("sqlite3", "./forum.db?_foreign_keys=on")
 	if err != nil {
 		panic("failed to connect database")
 	}
 
-	statement, _ := database.Prepare("PRAGMA foreign_keys = on")
-	statement.Exec()
+	/*
+		statement, _ := database.Prepare("PRAGMA foreign_keys = on")
+		statement.Exec()
+	*/
 
-	statement, _ = database.Prepare("CREATE TABLE IF NOT EXISTS users " +
-		"(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, email TEXT)")
+	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS users " +
+		"(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, nickname TEXT," +
+		"email TEXT, post_id INTEGER)" +
+		"FOREIGN KEY (post_id) REFERENCES posts(id)")
 	statement.Exec()
 
 	statement, _ = database.Prepare("CREATE TABLE IF NOT EXISTS posts " +
-		"(id INTEGER PRIMARY KEY, message TEXT, author TEXT, email TEXT, rating INTEGER, category_id Integer)" +
-		"FOREIGN KEY (category_id) REFERENCES categories(id)")
+		"(id INTEGER PRIMARY KEY, message TEXT, author TEXT, email TEXT, " +
+		"rating INTEGER, category_id Integer)" +
+		"FOREIGN KEY (category_id) REFERENCES categories(id)" +
+		"FOREIGN KEY (author) REFERENCES users(nickname)" +
+		"ON DELETE CASCADE")
 	statement.Exec()
 
 	statement, _ = database.Prepare("CREATE TABLE IF NOT EXISTS categories " +
-		"(id INTEGER PRIMARY KEY, name TEXT, post TEXT,)" +
-		"FOREIGN KEY (post_id) REFERENCES posts(id)")
+		"(id INTEGER PRIMARY KEY, name TEXT, post_id INTEGER,)" +
+		"FOREIGN KEY (post_id) REFERENCES posts(id)" +
+		"ON DELETE CASCADE")
 	statement.Exec()
 }
