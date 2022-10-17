@@ -16,6 +16,7 @@ a {
 
 a:visited {
     text-decoration: none;
+    color:#fff;
 }
 
 /* BODY */
@@ -23,7 +24,7 @@ body {
     margin: 0;
     font-family: 'Roboto Mono', monospace;
 
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.6;    
     
     max-width: 1400px;
@@ -34,24 +35,19 @@ body {
 .logo_reg {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
+    margin: 15px auto;
     background-color:#000;
+}
+
+.logo_text {
+    font-size: 25px;
+    margin: 10px 10px 10px 15px;
+    color: #fff;
 }
 
 .signs {
     display: flex;
     justify-content: center;
-    vertical-align: bottom;
-}
-
-.logo_text {
-    font-size: 25px;
-    margin: 5px;
-    margin-left: 10px;
-    color:#fff;
-}
-
-.signs {
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -60,13 +56,56 @@ body {
 
 .sign_link {
     display: block;
-    color: white;
     text-align: center;
     padding: 16px;
     text-decoration: none;
+    color: #fff;
 }
 
 .sign_link:hover {
-    color:#000;
+    cursor: pointer;
+    color: #000;
     background-color: #fff;
+}
+
+/* LINE */
+
+.post {
+    border: 2px solid;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.border {
+    border-bottom: 2px solid;
+    margin: 5px -15px;
+}
+
+.title {
+    font-size: 20px;
+}
+
+.categories {
+    margin: 10px auto;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.categorie {
+    border: 1px solid;
+    margin: auto 5px;
+    padding: 3px;
+}
+
+.post_btns {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.like_btn, .dislike_btn, .comments_btn {
+    margin: -5px 0 -10px 0;
+}
+
+.like_btn:hover, .dislike_btn:hover, .comments_btn:hover {
+    cursor: pointer;
 }
