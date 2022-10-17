@@ -23,12 +23,13 @@ func Init() {
 	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS users " +
 		"(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, nickname TEXT," +
 		"email TEXT, post_id INTEGER)" +
-		"FOREIGN KEY (post_id) REFERENCES posts(id)")
+		"FOREIGN KEY (post_id) REFERENCES posts(id)" +
+		"CONSTRAINT name_unique UNIQUE(nickname)")
 	statement.Exec()
 
 	statement, _ = database.Prepare("CREATE TABLE IF NOT EXISTS posts " +
 		"(id INTEGER PRIMARY KEY, message TEXT, author TEXT, email TEXT, " +
-		"rating INTEGER, category_id Integer)" +
+		"like INTEGER, dislike INTEGER, category_id INTEGER)" +
 		"FOREIGN KEY (category_id) REFERENCES categories(id)" +
 		"FOREIGN KEY (author) REFERENCES users(nickname)" +
 		"ON DELETE CASCADE")

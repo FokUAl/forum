@@ -4,7 +4,8 @@ type Post struct {
 	Id         int
 	Message    string
 	Author     string
-	rating     int
+	like       int
+	dislike    int
 	Categories []string
 }
 
