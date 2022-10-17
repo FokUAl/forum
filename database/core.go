@@ -41,4 +41,9 @@ func Init() {
 		"FOREIGN KEY (post_id) REFERENCES posts(id)" +
 		"ON DELETE CASCADE")
 	statement.Exec()
+
+	statement, _ = database.Prepare("CREATE TABLE IF NOT EXISTS comments " +
+		"(id INTEGER PRIMARY KEY, content TEXT, author TEXT, post_id INTEGER)" +
+		"FOREIGN KEY (post_id) REFERENCES posts(id)" +
+		"ON DELETE CASCADE")
 }
