@@ -24,7 +24,8 @@ func Init() {
 		"(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, nickname TEXT," +
 		"email TEXT, post_id INTEGER)" +
 		"FOREIGN KEY (post_id) REFERENCES posts(id)" +
-		"CONSTRAINT name_unique UNIQUE(nickname)")
+		"CONSTRAINT name_unique UNIQUE(nickname)" +
+		"CONSTRAINT email_unique UNIQUE(email)")
 	statement.Exec()
 
 	statement, _ = database.Prepare("CREATE TABLE IF NOT EXISTS posts " +
