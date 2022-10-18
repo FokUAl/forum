@@ -6,6 +6,10 @@
     box-sizing: border-box;
 }
 
+html {
+    height: 100%;
+}
+
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
@@ -16,7 +20,7 @@ a {
 
 a:visited {
     text-decoration: none;
-    color:#fff;
+    color:#F4EBD0;
 }
 
 /* BODY */
@@ -29,6 +33,38 @@ body {
     
     max-width: 1400px;
     margin: 0 auto;
+
+    color: #122620;
+}
+
+.bg {
+    animation:slide 10s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #122620 50%, #F4EBD0 50%);
+    bottom:0;
+    left:-50%;
+    opacity:.5;
+    position:fixed;
+    right:-50%;
+    top:0;
+    z-index:-1;
+}
+  
+.bg2 {
+    animation-direction:alternate-reverse;
+    animation-duration:15s;
+}
+  
+.bg3 {
+    animation-duration:20s;
+}
+
+@keyframes slide {
+    0% {
+      transform:translateX(-25%);
+    }
+    100% {
+      transform:translateX(25%);
+    }
 }
 
 /* HEADER */
@@ -36,13 +72,13 @@ body {
     display: flex;
     justify-content: space-between;
     margin: 15px auto;
-    background-color:#000;
+    background-color:#122620;
 }
 
 .logo_text {
     font-size: 25px;
     margin: 10px 10px 10px 15px;
-    color: #fff;
+    color: #F4EBD0;
 }
 
 .signs {
@@ -59,21 +95,27 @@ body {
     text-align: center;
     padding: 16px;
     text-decoration: none;
-    color: #fff;
+    color: #F4EBD0;
 }
 
 .sign_link:hover {
     cursor: pointer;
-    color: #000;
-    background-color: #fff;
+    color: #122620;
+    background-color: #F4EBD0;
 }
 
 /* LINE */
 
 .post {
     border: 2px solid;
-    padding: 15px;
+    padding: 10px 15px 0px 15px;
     margin-bottom: 15px;
+    background-color: #F4EBD0;
+}
+
+.title_author {
+    display: flex;
+    justify-content: space-between;
 }
 
 .border {
@@ -82,7 +124,11 @@ body {
 }
 
 .title {
-    font-size: 20px;
+    font-size: 23px;
+}
+
+.title:hover {
+    cursor: pointer;
 }
 
 .categories {
@@ -92,20 +138,8 @@ body {
 }
 
 .categorie {
+    font-size: 14px;
     border: 1px solid;
     margin: auto 5px;
     padding: 3px;
-}
-
-.post_btns {
-    display: flex;
-    justify-content: flex-start;
-}
-
-.like_btn, .dislike_btn, .comments_btn {
-    margin: -5px 0 -10px 0;
-}
-
-.like_btn:hover, .dislike_btn:hover, .comments_btn:hover {
-    cursor: pointer;
 }
