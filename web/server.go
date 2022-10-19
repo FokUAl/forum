@@ -1,18 +1,18 @@
 package web
 
 import (
+	"log"
 	"net/http"
 	"os"
-	"log"
 )
 
-type application struct{
-	server *http.Server
+type application struct {
+	server   *http.Server
 	errorLog *log.Logger
-	infoLog   *log.Logger
+	infoLog  *log.Logger
 }
 
-func  Run(port string){
+func Run(port string) {
 	mux := http.NewServeMux()
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
@@ -21,28 +21,26 @@ func  Run(port string){
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 
 	srv := &http.Server{
-		Addr: port,
+		Addr:    port,
 		Handler: mux,
 	}
 
 	app := &application{
-		server: srv,
+		server:   srv,
 		errorLog: errorLog,
-		infoLog: infoLog,
+		infoLog:  infoLog,
 	}
 
-	//TO DO
+	// TO DO
 	mux.HandleFunc("/", app.home)
+	mux.HandleFunc("/post", app.post)
+	mux.HandleFunc("/signup", app.signUp)
 
 	mux.Handle("/static", http.NotFoundHandler())
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 
-
-
 	infoLog.Printf("Launch server on %s", port)
-
 
 	err := srv.ListenAndServe()
 	errorLog.Fatal(err)
-
 }
