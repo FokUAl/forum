@@ -120,7 +120,20 @@ body {
 
 /* SIGN UP */
 
-textarea {
+.sign_up {
+    display: grid;
+    justify-content: center;
+    border: 2px solid #333652;
+    max-width: 300px;
+    background-color: #E9EAEC;
+    margin: auto;
+}
+
+.title {
+    text-align: center;
+}
+
+.textarea_signup {
     background-color: #E9EAEC;
     color: #333652;
     resize: none;
@@ -131,6 +144,28 @@ textarea {
     padding: 10px;
 }
 
+.textarea_signup:focus {
+    outline: none;
+}
+
+.signup_btn {
+    border: 2px solid #333652;
+    background-color: #E9EAEC;
+    color: #333652;
+    padding: 15px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.signup_btn:hover {
+    background-color: #333652;
+    color: #E9EAEC;
+    border: 2px solid #E9EAEC;
+}
 
 /* FOOTER */
 
