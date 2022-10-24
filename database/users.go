@@ -11,7 +11,7 @@ type User struct {
 
 func (user *User) Create() (err error) {
 	statement := "INSERT INTO users (firstname, lastname, nickname, email) " +
-		"values ($1, $2, $3, $4) returning id"
+		"VALUES ($1, $2, $3, $4) returning id"
 	stmt, err := database.Prepare(statement)
 	if err != nil {
 		return
