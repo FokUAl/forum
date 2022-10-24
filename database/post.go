@@ -7,20 +7,21 @@ type Post struct {
 	Title      string
 	Message    string
 	Author     string
+	User_Id    int
 	Like       int
 	Dislike    int
 	Categories []string
 }
 
 func (post *Post) Create(database *sql.DB) (err error) {
-	statement := "INSERT INTO posts (title, message, author) VALUES ($1, $2, $3) returning id"
+	statement := "INSERT INTO posts (title, message, author, user_id) VALUES ($1, $2, $3, $4) returning id"
 	stmt, err := database.Prepare(statement)
 	if err != nil {
 		return
 	}
 
 	defer stmt.Close()
-	err = stmt.QueryRow(post.Title, post.Message, post.Author).Scan(&post.Id)
+	err = stmt.QueryRow(post.Title, post.Message, post.Author, post.User_Id).Scan(&post.Id)
 	return
 }
 

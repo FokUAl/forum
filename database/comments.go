@@ -1,32 +1,38 @@
 package database
 
-import "errors"
+import (
+	"database/sql"
+	"errors"
+)
 
 type Comment struct {
 	Id      int
 	Content string
 	Author  string
+	Like    int
+	Dislike int
 	Post    *Post
 }
 
-func (comment *Comment) Create() (err error) {
+func (comment *Comment) Create(db *sql.DB) (err error) {
 	if comment.Post == nil {
 		err = errors.New("Post not found")
 		return
 	}
-	statement := "INSERTS INTO comments (content, author, post_id)" +
-		"values ($1, $2, $3)"
-	err = database.QueryRow(statement, comment.Content, comment.Author, comment.Post.Id).Scan(&comment.Id)
+	statement := "INSERT INTO comments (content, author, post_id)" +
+		"values ($1, $2, $3) returning id"
+	err = db.QueryRow(statement, comment.Content, comment.Author, comment.Post.Id).Scan(&comment.Id)
 	return
 }
 
-func (comment *Comment) Delete() (err error) {
-	_, err = database.Exec("DELETE FROM comments where id = $1", comment.Id)
+func (comment *Comment) Delete(db *sql.DB) (err error) {
+	_, err = db.Exec("DELETE FROM comments where id = $1", comment.Id)
 	return
 }
 
-func (comment *Comment) Update() (err error) {
-	_, err = database.Exec("UPDATE comments SET content = $2, author = $3 WHERE id = $1",
-		comment.Id, comment.Content, comment.Author)
+func (comment *Comment) Update(db *sql.DB, newComment string) (err error) {
+	_, err = db.Exec("UPDATE comments SET content = $1 WHERE id = $2",
+		newComment, comment.Id)
+	comment.Content = newComment
 	return
 }
