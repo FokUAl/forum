@@ -9,7 +9,7 @@ import (
 
 var database *sql.DB
 
-func Init() {
+func Init() *sql.DB {
 	var err error
 	database, err := sql.Open("sqlite3", "file:forum.db")
 	if err != nil {
@@ -24,7 +24,7 @@ func Init() {
 
 	// CreateTables()
 	statement, err = database.Prepare("CREATE TABLE IF NOT EXISTS users " +
-		"(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, nickname TEXT," +
+		"(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, nickname TEXT UNIQUE," +
 		"email TEXT)")
 	if err != nil {
 		log.Fatal(err)
@@ -32,7 +32,7 @@ func Init() {
 	statement.Exec()
 
 	statement, err = database.Prepare("CREATE TABLE IF NOT EXISTS posts " +
-		"(id INTEGER PRIMARY KEY, message TEXT, author TEXT, email TEXT, " +
+		"(id INTEGER PRIMARY KEY, title TEXT, message TEXT, author TEXT, email TEXT, " +
 		"like INTEGER DEFAULT 0, dislike INTEGER DEFAULT 0, user_id INTEGER," +
 		"FOREIGN KEY (user_id) REFERENCES users(id))")
 	if err != nil {
@@ -55,6 +55,8 @@ func Init() {
 		log.Fatal(err)
 	}
 	statement.Exec()
+
+	return database
 }
 
 // func CreateTables() {

@@ -1,40 +1,47 @@
 package database
 
+import "database/sql"
+
 type Post struct {
 	Id         int
+	Title      string
 	Message    string
 	Author     string
-	like       int
-	dislike    int
+	Like       int
+	Dislike    int
 	Categories []string
 }
 
-func (post *Post) Create() (err error) {
-	statement := "INSERT INTO posts (message, author) VALUES ($1, $2)"
+func (post *Post) Create(database *sql.DB) (err error) {
+	statement := "INSERT INTO posts (title, message, author) VALUES ($1, $2, $3) returning id"
 	stmt, err := database.Prepare(statement)
 	if err != nil {
 		return
 	}
 
 	defer stmt.Close()
-	err = stmt.QueryRow(post.Message, post.Author).Scan(&post.Id)
+	err = stmt.QueryRow(post.Title, post.Message, post.Author).Scan(&post.Id)
 	return
 }
 
-func (post *Post) Delete() (err error) {
+func (post *Post) Delete(database *sql.DB) (err error) {
 	_, err = database.Exec("DELETE FROM posts where id = $1", post.Id)
 	return
 }
 
-func GetPost(id int) (post Post, err error) {
+func GetPost(database *sql.DB, id int) (post Post, err error) {
 	post = Post{}
-	err = database.QueryRow("SELECT id, content, author FROM posts WHERE id = $1",
-		id).Scan(&post.Id, &post.Message, &post.Author)
+	err = database.QueryRow("SELECT id, title, message, author FROM posts WHERE id = $1",
+		id).Scan(&post.Id, &post.Title, &post.Message, &post.Author)
 	return
 }
 
-func (post *Post) Update() (err error) {
-	_, err = database.Exec("UPDATE posts SET message = $2, author = $3 WHERE id = $1",
-		post.Id, post.Message, post.Author)
+func (post *Post) Update(database *sql.DB, newTitle, newMessage string) (err error) {
+	_, err = database.Exec("UPDATE posts SET message = $1, title = $2 WHERE id = $3",
+		newMessage, newTitle, post.Id)
+
+	post.Title = newTitle
+	post.Message = newMessage
+
 	return
 }
