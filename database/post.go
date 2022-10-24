@@ -10,7 +10,7 @@ type Post struct {
 }
 
 func (post *Post) Create() (err error) {
-	statement := "INSERT INTO posts (message, author) VALUES ($1, $2) returning id"
+	statement := "INSERT INTO posts (message, author) VALUES ($1, $2)"
 	stmt, err := database.Prepare(statement)
 	if err != nil {
 		return

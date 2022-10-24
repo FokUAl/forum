@@ -15,7 +15,7 @@ func (comment *Comment) Create() (err error) {
 		return
 	}
 	statement := "INSERTS INTO comments (content, author, post_id)" +
-		"values ($1, $2, $3) returning id"
+		"values ($1, $2, $3)"
 	err = database.QueryRow(statement, comment.Content, comment.Author, comment.Post.Id).Scan(&comment.Id)
 	return
 }
