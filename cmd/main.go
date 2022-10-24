@@ -2,20 +2,22 @@ package main
 
 //"forumAA/web"
 
-import "forumAA/database"
+import (
+	"fmt"
+	"forumAA/web"
+	"os"
+)
 
 func main() {
-	// args := os.Args[1:]
-	// port := ":4888"
+	args := os.Args[1:]
+	port := ":4888"
 
-	// if len(args) == 1 {
-	// 	port = args[0]
-	// } else if len(args) > 1 {
-	// 	fmt.Println("Number of arguments must be one.")
-	// 	os.Exit(1)
-	// }
+	if len(args) == 1 {
+		port = args[0]
+	} else if len(args) > 1 {
+		fmt.Println("Number of arguments must be one.")
+		os.Exit(1)
+	}
 
-	// web.Run(port)
-
-	database.Init()
+	web.Run(port)
 }
