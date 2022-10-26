@@ -9,19 +9,19 @@ import (
 
 func Init() *sql.DB {
 	var err error
-	database, err := sql.Open("sqlite3", "file:forum.db")
+	db, err := sql.Open("sqlite3", "file:forum.db")
 	if err != nil {
 		panic("failed to connect database")
 	}
 
-	statement, err := database.Prepare("PRAGMA foreign_keys = 1")
+	statement, err := db.Prepare("PRAGMA foreign_keys = 1")
 	if err != nil {
 		log.Fatal(err)
 	}
 	statement.Exec()
 
 	// CreateTables()
-	statement, err = database.Prepare("CREATE TABLE IF NOT EXISTS users " +
+	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS users " +
 		"(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, nickname TEXT UNIQUE," +
 		"email TEXT UNIQUE)")
 	if err != nil {
@@ -29,7 +29,7 @@ func Init() *sql.DB {
 	}
 	statement.Exec()
 
-	statement, err = database.Prepare("CREATE TABLE IF NOT EXISTS posts " +
+	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS posts " +
 		"(id INTEGER PRIMARY KEY, title TEXT, message TEXT, author TEXT, " +
 		"like INTEGER DEFAULT 0, dislike INTEGER DEFAULT 0, user_id INTEGER," +
 		"FOREIGN KEY (user_id) REFERENCES users(id))")
@@ -38,7 +38,7 @@ func Init() *sql.DB {
 	}
 	statement.Exec()
 
-	statement, err = database.Prepare("CREATE TABLE IF NOT EXISTS categories " +
+	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS categories " +
 		"(id INTEGER PRIMARY KEY, name TEXT, post_id INTEGER, " +
 		"FOREIGN KEY (post_id) REFERENCES posts(id) " +
 		"ON DELETE CASCADE)")
@@ -47,7 +47,7 @@ func Init() *sql.DB {
 	}
 	statement.Exec()
 
-	statement, err = database.Prepare("CREATE TABLE IF NOT EXISTS comments " +
+	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS comments " +
 		"(id INTEGER PRIMARY KEY, content TEXT, author TEXT, post_id INTEGER," +
 		"FOREIGN KEY (post_id) REFERENCES posts(id) " +
 		"ON DELETE CASCADE)")
@@ -56,7 +56,7 @@ func Init() *sql.DB {
 	}
 	statement.Exec()
 
-	return database
+	return db
 }
 
 // func CreateTables() {
