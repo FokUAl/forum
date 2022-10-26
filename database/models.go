@@ -16,6 +16,7 @@ type User struct {
 	Firstname string
 	Lastname  string
 	Nickname  string
+	Password  string
 	Email     string
 	Posts     []Post
 }

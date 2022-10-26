@@ -22,10 +22,10 @@ func (user *User) Delete(db *sql.DB) (err error) {
 	return
 }
 
-func GetUser(db *sql.DB, id int) (user User, err error) {
+func GetUser(db *sql.DB, nickname string) (user User, err error) {
 	user = User{}
-	err = db.QueryRow("SELECT id, firstname, lastname, nickname, email FROM users WHERE id = $1",
-		id).Scan(&user.Id, &user.Firstname, &user.Lastname, &user.Nickname, &user.Email)
+	err = db.QueryRow("SELECT id, firstname, lastname, nickname, password, email FROM users WHERE nickname = $1",
+		nickname).Scan(&user.Id, &user.Firstname, &user.Lastname, &user.Nickname, &user.Password, &user.Email)
 	return
 }
 

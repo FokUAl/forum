@@ -23,7 +23,7 @@ func Init() *sql.DB {
 	// CreateTables()
 	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS users " +
 		"(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, nickname TEXT UNIQUE," +
-		"email TEXT UNIQUE)")
+		"password TEXT, email TEXT UNIQUE)")
 	if err != nil {
 		log.Fatal(err)
 	}
