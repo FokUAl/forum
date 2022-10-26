@@ -1,15 +1,8 @@
 package database
 
-import "database/sql"
-
-type User struct {
-	Id        int
-	Firstname string
-	Lastname  string
-	Nickname  string
-	Email     string
-	Posts     []Post
-}
+import (
+	"database/sql"
+)
 
 func (user *User) Create(database *sql.DB) (err error) {
 	statement := "INSERT INTO users (firstname, lastname, nickname, email) " +

@@ -1,17 +1,8 @@
 package database
 
-import "database/sql"
-
-type Post struct {
-	Id         int
-	Title      string
-	Message    string
-	Author     string
-	User_Id    int
-	Like       int
-	Dislike    int
-	Categories []string
-}
+import (
+	"database/sql"
+)
 
 func (post *Post) Create(database *sql.DB) (err error) {
 	statement := "INSERT INTO posts (title, message, author, user_id) VALUES ($1, $2, $3, $4) returning id"

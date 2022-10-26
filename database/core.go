@@ -7,8 +7,6 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-var database *sql.DB
-
 func Init() *sql.DB {
 	var err error
 	database, err := sql.Open("sqlite3", "file:forum.db")
