@@ -5,15 +5,6 @@ import (
 	"errors"
 )
 
-type Comment struct {
-	Id      int
-	Content string
-	Author  string
-	Like    int
-	Dislike int
-	Post    *Post
-}
-
 func (comment *Comment) Create(db *sql.DB) (err error) {
 	if comment.Post == nil {
 		err = errors.New("Post not found")
