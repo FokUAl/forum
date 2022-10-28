@@ -21,8 +21,7 @@ func (comment *Comment) Delete(db *sql.DB) (err error) {
 	return
 }
 
-func GetComment(db *sql.DB, id int) (err error) {
-	comment := Comment{}
+func GetComment(db *sql.DB, id int) (comment Comment, err error) {
 	err = db.QueryRow("SELECT content, author, like, dislike FROM comments WHERE id = $1",
 		id).Scan(&comment.Content, comment.Author, comment.Like, comment.Dislike)
 	return
