@@ -2,7 +2,6 @@ package internal
 
 import (
 	"database/sql"
-	"errors"
 	"forumAA/database"
 )
 
@@ -16,6 +15,15 @@ func CreatePost(db *sql.DB) error {
 	return err
 }
 
-func EditPost(db *sql.DB) error {
-	return errors.New("Some error")
+func EditPost(db *sql.DB, title, message string) error {
+	// TO DO
+	// Read id from post
+	id := 1
+	post, err := database.GetPost(db, id)
+	if err != nil {
+		return err
+	}
+
+	err = post.Update(db, title, message)
+	return err
 }
