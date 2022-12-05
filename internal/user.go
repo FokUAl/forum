@@ -4,29 +4,27 @@ import (
 	"database/sql"
 	"errors"
 	"forumAA/database"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func Registration(db *sql.DB, new_user database.User) error {
-	// TO DO
-	// Reading data from front
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(new_user.Password), 8)
+	new_user.Password = string(hashedPassword)
 
-	user := new_user
-
-	err := user.Create(db)
+	err = new_user.Create(db)
 
 	return err
 }
 
 func Login(db *sql.DB, user_nick string, user_passw string) error {
-	// TO DO
-	// Reading nickname and password from front
-
 	userInfo, err := database.GetUser(db, user_nick)
 	if err != nil {
 		return err
 	}
 
-	if user_passw != userInfo.Password {
+	err = bcrypt.CompareHashAndPassword([]byte(userInfo.Password), []byte(user_passw))
+	if err != nil {
 		err = errors.New("Login: password or login invalid")
 	}
 
