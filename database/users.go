@@ -5,15 +5,15 @@ import (
 )
 
 func (user *User) Create(db *sql.DB) (err error) {
-	statement := "INSERT INTO users (firstname, lastname, nickname, email) " +
-		"VALUES ($1, $2, $3, $4) returning id"
+	statement := "INSERT INTO users (firstname, lastname, nickname, password, email) " +
+		"VALUES ($1, $2, $3, $4, $5) returning id"
 	stmt, err := db.Prepare(statement)
 	if err != nil {
 		return
 	}
 
 	defer stmt.Close()
-	err = stmt.QueryRow(user.Firstname, user.Lastname, user.Nickname, user.Email).Scan(&user.Id)
+	err = stmt.QueryRow(user.Firstname, user.Lastname, user.Nickname, user.Password, user.Email).Scan(&user.Id)
 	return
 }
 
