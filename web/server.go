@@ -1,6 +1,8 @@
 package web
 
 import (
+	"database/sql"
+	"forumAA/database"
 	"log"
 	"net/http"
 	"os"
@@ -10,6 +12,7 @@ type application struct {
 	server   *http.Server
 	errorLog *log.Logger
 	infoLog  *log.Logger
+	database *sql.DB
 }
 
 func Run(port string) {
@@ -20,6 +23,8 @@ func Run(port string) {
 
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 
+	dbHandler := database.Init()
+
 	srv := &http.Server{
 		Addr:    port,
 		Handler: mux,
@@ -29,6 +34,7 @@ func Run(port string) {
 		server:   srv,
 		errorLog: errorLog,
 		infoLog:  infoLog,
+		database: dbHandler,
 	}
 
 	// TO DO

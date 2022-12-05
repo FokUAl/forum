@@ -6,11 +6,11 @@ import (
 	"forumAA/database"
 )
 
-func Registration(db *sql.DB) error {
+func Registration(db *sql.DB, new_user database.User) error {
 	// TO DO
 	// Reading data from front
 
-	user := database.User{}
+	user := new_user
 
 	err := user.Create(db)
 

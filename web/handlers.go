@@ -99,7 +99,7 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 			Password:  r.FormValue("password"),
 		}
 
-		err = internal.Registration(user)
+		err = internal.Registration(app.database, user)
 		if err != nil {
 			log.Println(err.Error())
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
