@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../static/css/signup.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&family=Roboto+Mono:wght@200;400&display=swap" rel="stylesheet">
+        <title>Forum</title>
+    </head>
+    <body>
+        <div class="bg"></div>
+        <div class="bg bg2"></div>
+        <div class="bg bg3"></div>
+        <header>
+            <div class="logo_reg">
+                <ul class="logo">
+                    <li onclick="location.href='./'" class="logo_link">Forum</li>
+                </ul>
+                <ul class="signs">
+                    <li onclick="location.href='./signin'" class="sign_link">Sign in</li>
+                    <li onclick="location.href='./signup'" class="sign_link">Sign up</li>
+                </ul>
+            </div>
+            
+        </header>
+        <form action="/signup" method="post" class="sign_up">
+            <div class="title">Sign Up</div>
+            <input id="FirstName" class="textarea_signup" name="firstName" type="text" placeholder="Enter your name">
+            <input id="LastName" class="textarea_signup" name="lastName" type="text" placeholder="Enter your last name">
+            <input id="Email" class="textarea_signup" name="email" type="text" placeholder="Enter your email">
+            <input id="Nickname" class="textarea_signup" name="nickname" type="text" placeholder="Enter you nickname">
+            <input id="Password" class="textarea_signup" name="password" type="password" placeholder="Enter your password">
+            
+            <input class="signup_btn" type="submit" value="Sign Up">
+        </form>
+        <footer>
+            <div class="authors">Development by @HgCl2 & @aleebeg</div>
+            <div class="year">2022</div>
+        </footer>
+    </body>
+</html>
