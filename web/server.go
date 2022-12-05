@@ -41,6 +41,7 @@ func Run(port string) {
 	mux.HandleFunc("/", app.home)
 	mux.HandleFunc("/post", app.post)
 	mux.HandleFunc("/signup", app.signUp)
+	mux.HandleFunc("/signin", app.signIn)
 
 	mux.Handle("/static", http.NotFoundHandler())
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))

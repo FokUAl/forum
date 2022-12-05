@@ -110,28 +110,41 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
-
 	if r.URL.Path != "/signin" {
 		http.NotFound(w, r)
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
-	t, err := template.ParseFiles("./ui/template/signIn.html")
-	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, "File not found: signin.html", 500)
-		return
-	}
+	switch r.Method {
+	case http.MethodGet:
+		t, err := template.ParseFiles("./ui/template/signIn.html")
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, "File not found: signin.html", 500)
+			return
+		}
 
-	err = t.Execute(w, nil)
-	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		err = t.Execute(w, nil)
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+	case http.MethodPost:
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "StatusBadRequest", http.StatusBadRequest)
+			return
+		}
+
+		nick := r.FormValue("nickname")
+		password := r.FormValue("password")
+
+		err = internal.Login(app.database, nick, password)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		} else {
+			http.Error(w, "Success!", 200)
+		}
 	}
 }

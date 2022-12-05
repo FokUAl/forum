@@ -17,18 +17,16 @@ func Registration(db *sql.DB, new_user database.User) error {
 	return err
 }
 
-func Login(db *sql.DB) error {
+func Login(db *sql.DB, user_nick string, user_passw string) error {
 	// TO DO
 	// Reading nickname and password from front
-	nick := ""
-	pass := ""
 
-	userInfo, err := database.GetUser(db, nick)
+	userInfo, err := database.GetUser(db, user_nick)
 	if err != nil {
 		return err
 	}
 
-	if pass != userInfo.Password {
+	if user_passw != userInfo.Password {
 		err = errors.New("Login: password or login invalid")
 	}
 
