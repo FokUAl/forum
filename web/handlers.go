@@ -6,6 +6,9 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"time"
+
+	"github.com/gofrs/uuid"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -84,6 +87,7 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
+
 	case http.MethodPost:
 		err := r.ParseForm()
 		if err != nil {
@@ -130,6 +134,7 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 			log.Println(err.Error())
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
+
 	case http.MethodPost:
 		err := r.ParseForm()
 		if err != nil {
@@ -143,8 +148,27 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 		err = internal.Login(app.database, nick, password)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
-		} else {
-			http.Error(w, "Success!", 200)
 		}
+		// else {
+		// 	http.Error(w, "Success!", 200)
+		// }
+
+		sessionToken, err := uuid.NewV4()
+		if err != nil {
+			log.Fatalf("failed to generate UUID: %v", err)
+		}
+
+		expiresAt := time.Now().Add(120 * time.Second)
+
+		sessions[sessionToken.String()] = session{
+			username: nick,
+			expiry:   expiresAt,
+		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:    "session_token",
+			Value:   sessionToken.String(),
+			Expires: expiresAt,
+		})
 	}
 }
