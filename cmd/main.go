@@ -5,6 +5,7 @@ package main
 import (
 	"fmt"
 	"forumAA/web"
+	"log"
 	"os"
 )
 
@@ -19,5 +20,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	web.Run(port)
+	err := web.Run(port)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

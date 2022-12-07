@@ -15,7 +15,7 @@ type application struct {
 	database *sql.DB
 }
 
-func Run(port string) {
+func Run(port string) error {
 	mux := http.NewServeMux()
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
@@ -50,4 +50,6 @@ func Run(port string) {
 
 	err := srv.ListenAndServe()
 	errorLog.Fatal(err)
+
+	return err
 }
