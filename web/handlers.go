@@ -1,7 +1,6 @@
 package web
 
 import (
-	"fmt"
 	"forumAA/database"
 	"forumAA/internal"
 	"html/template"
@@ -32,7 +31,9 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = t.Execute(w, nil)
+	user := app.checkUser(w, r)
+	// fmt.Println(user)
+	err = t.Execute(w, user)
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -150,16 +151,13 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
-		// else {
-		// 	http.Error(w, "Success!", 200)
-		// }
 
 		sessionToken, err := uuid.NewV4()
 		if err != nil {
 			log.Fatalf("failed to generate UUID: %v", err)
 		}
 
-		expiresAt := time.Now().Add(120 * time.Second)
+		expiresAt := time.Now().Add(12 * time.Hour)
 
 		sessions[sessionToken.String()] = session{
 			username: nick,
@@ -172,7 +170,6 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 			Expires: expiresAt,
 		})
 
-		fmt.Println("Redirect")
-		app.signUp(w, r)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 }

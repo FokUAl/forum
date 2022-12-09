@@ -21,11 +21,13 @@ func (app *application) checkUser(w http.ResponseWriter, r *http.Request) databa
 	c, err := r.Cookie("session_token")
 	if err != nil {
 		if err == http.ErrNoCookie {
-		} else {
-			// For any other type of error, return a bad request status
-			w.WriteHeader(http.StatusBadRequest)
+			w.WriteHeader(http.StatusUnauthorized)
 			return database.User{}
 		}
+		// For any other type of error, return a bad request status
+		w.WriteHeader(http.StatusBadRequest)
+		return database.User{}
+
 	}
 	sessionToken := c.Value
 
