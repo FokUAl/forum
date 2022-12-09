@@ -39,8 +39,14 @@ func (app *application) checkUser(w http.ResponseWriter, r *http.Request) databa
 
 	if userSession.isExpired() {
 		delete(sessions, sessionToken)
-		http.Redirect(w, r, "localhost:4888/signin", 300)
+		http.Redirect(w, r, "/", 300)
 	}
 
-	return database.User{}
+	result, err := database.GetUser(app.database, userSession.username)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return database.User{}
+	}
+
+	return result
 }
