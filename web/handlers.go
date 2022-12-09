@@ -110,6 +110,7 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 			log.Println(err.Error())
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 		}
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 	default:
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 	}
@@ -159,10 +160,7 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 
 		expiresAt := time.Now().Add(12 * time.Hour)
 
-		sessions[sessionToken.String()] = session{
-			username: nick,
-			expiry:   expiresAt,
-		}
+		database.CreateSession(app.database, nick, sessionToken.String(), expiresAt)
 
 		http.SetCookie(w, &http.Cookie{
 			Name:    "session_token",

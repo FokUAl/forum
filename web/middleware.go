@@ -6,15 +6,8 @@ import (
 	"time"
 )
 
-var sessions = map[string]session{}
-
-type session struct {
-	username string
-	expiry   time.Time
-}
-
-func (s session) isExpired() bool {
-	return s.expiry.Before(time.Now())
+func isExpired(expiry time.Time) bool {
+	return expiry.Before(time.Now())
 }
 
 func (app *application) checkUser(w http.ResponseWriter, r *http.Request) database.User {
@@ -32,22 +25,23 @@ func (app *application) checkUser(w http.ResponseWriter, r *http.Request) databa
 	sessionToken := c.Value
 
 	// We then get the session from our session map
-	userSession, exists := sessions[sessionToken]
-	if !exists {
-		// If the session token is not present in session map, return an unauthorized error
+	result, err := database.GetUserByToken(app.database, sessionToken)
+	if err != nil {
+		// If the session token is not present in sessions table, return an unauthorized error
 		w.WriteHeader(http.StatusUnauthorized)
 		return database.User{}
 	}
 
-	if userSession.isExpired() {
-		delete(sessions, sessionToken)
-		http.Redirect(w, r, "/", 300)
+	expiry, err := database.GetExpiryByToken(app.database, sessionToken)
+	if err != nil {
+		// If the session token is not present in session table, return an unauthorized error
+		w.WriteHeader(http.StatusUnauthorized)
+		return database.User{}
 	}
 
-	result, err := database.GetUser(app.database, userSession.username)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return database.User{}
+	if isExpired(expiry) {
+		database.DeleteSession(app.database, sessionToken)
+		http.Redirect(w, r, "/", 300)
 	}
 
 	return result

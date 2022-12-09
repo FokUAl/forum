@@ -56,9 +56,12 @@ func Init() *sql.DB {
 	}
 	statement.Exec()
 
+	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS sessions " +
+		"(id INTEGER PRIMARY KEY, nickname TEXT UNIQUE, session_token TEXT, expiry DATETIME)")
+	if err != nil {
+		log.Fatalf("1: %s", err.Error())
+	}
+	statement.Exec()
+
 	return db
 }
-
-// func CreateTables() {
-
-// }
