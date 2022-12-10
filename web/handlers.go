@@ -171,3 +171,29 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
 }
+
+func (app *application) profile(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	user := app.checkUser(w, r)
+	if user.Id == 0 {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
+
+	t, err := template.ParseFiles("./ui/template/profile.html")
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "File not found: post.html", 500)
+		return
+	}
+
+	err = t.Execute(w, user)
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	}
+}
