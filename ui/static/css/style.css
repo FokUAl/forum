@@ -104,18 +104,50 @@ body {
     overflow: hidden;
 }
 
-.profile_link {
-    display: block;
+.dropbtn {
+    display: inline-block;
     text-align: center;
     padding: 16px;
     text-decoration: none;
     color: #E9EAEC;
+    position: relative;
 }
 
-.profile_link:hover {
+.profile_drop:hover {
     cursor: pointer;
     color: #333652;
     background-color: #E9EAEC;
+}
+
+.dropdown_content {
+    display: none;
+    position: absolute;
+    background-color: #E9EAEC;
+    z-index:1;
+}
+
+.dropdown_content a {
+    color: #333652;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-bottom:#333652 2px solid; 
+    border-left:#333652 2px solid;
+    border-right:#333652 2px solid;
+}
+
+.dropdown_content a:hover {
+    background-color: #333652;
+    color: #E9EAEC;
+}
+
+.profile_drop:hover .dropdown_content {
+    display: block;
+}
+
+.profile_drop:hover .dropbtn {
+    color:#333652;
+    border:#333652 2px solid;
 }
 
 .sign_link {

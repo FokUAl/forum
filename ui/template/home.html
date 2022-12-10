@@ -21,8 +21,13 @@
                 </ul>
                 <ul class="signs">
                     {{ if .Nickname }}
-                    <li onclick="location.href='./profile/{{.Nickname}}'" class="profile_link">{{ .Nickname }}</li>
-                    
+                    <li class="profile_drop">
+                        <div class="dropbtn">{{ .Nickname }}</div>
+                        <div class="dropdown_content">
+                            <a href="./profile/{{.Nickname}}">Profile</a>
+                            <a href="/logout">Log Out</a>
+                        </div>
+                    </li>
                     {{ else }}
                     <li onclick="location.href='./signin'" class="sign_link">Sign in</li>
                     <li onclick="location.href='./signup'" class="sign_link">Sign up</li>
