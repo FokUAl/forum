@@ -30,3 +30,25 @@ func Login(db *sql.DB, user_nick string, user_passw string) error {
 
 	return err
 }
+
+func NewPassword(db *sql.DB, user_nick string, old_password string, new_password string) error {
+	userInfo, err := database.GetUser(db, user_nick)
+	if err != nil {
+		return err
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(userInfo.Password), []byte(old_password))
+	if err != nil {
+		err = errors.New("NewPassword: password is invalid")
+		return err
+	}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(new_password), 8)
+	if err != nil {
+		return err
+	}
+
+	userInfo.ChangePassword(db, string(hashedPassword))
+
+	return err
+}

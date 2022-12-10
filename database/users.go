@@ -38,3 +38,12 @@ func (user *User) Update(db *sql.DB, newFirstname, newLastname string) (err erro
 
 	return
 }
+
+func (user *User) ChangePassword(db *sql.DB, new_password string) error {
+	_, err := db.Exec("UPDATE users SET password = $1 WHERE id = $2",
+		new_password, user.Id)
+
+	user.Password = new_password
+
+	return err
+}
