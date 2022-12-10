@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 )
 
 func (comment *Comment) Create(db *sql.DB) (err error) {
@@ -32,4 +33,28 @@ func (comment *Comment) Update(db *sql.DB, newComment string) (err error) {
 		newComment, comment.Id)
 	comment.Content = newComment
 	return
+}
+
+func GetAllCommentsByPost(db *sql.DB, post_id int) ([]Comment, error) {
+	var result []Comment
+
+	statement := "SELECT * FROM comments WHERE post_id = $1"
+
+	rows, err := db.Query(statement, post_id)
+	if err != nil {
+		return nil, fmt.Errorf("get comments: %w", err)
+	}
+
+	for rows.Next() {
+		var comment Comment
+
+		err = rows.Scan(&comment.Id, &comment.Content, &comment.Author, &comment.Like, &comment.Dislike)
+		if err != nil {
+			return nil, fmt.Errorf("get comments: %w", err)
+		}
+
+		result = append(result, comment)
+	}
+
+	return result, nil
 }

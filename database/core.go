@@ -48,7 +48,7 @@ func Init() *sql.DB {
 	statement.Exec()
 
 	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS comments " +
-		"(id INTEGER PRIMARY KEY, content TEXT, author TEXT, post_id INTEGER," +
+		"(id INTEGER PRIMARY KEY, content TEXT, author TEXT, like INTEGER, dislike INTEGER, post_id INTEGER," +
 		"FOREIGN KEY (post_id) REFERENCES posts(id) " +
 		"ON DELETE CASCADE)")
 	if err != nil {
