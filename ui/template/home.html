@@ -20,8 +20,13 @@
                     <li onclick="location.href='./'" class="logo_link">Forum</li>
                 </ul>
                 <ul class="signs">
+                    {{ if .Nickname }}
+                    <li onclick="location.href='./profile/{{.Nickname}}'" class="profile_link">{{ .Nickname }}</li>
+                    
+                    {{ else }}
                     <li onclick="location.href='./signin'" class="sign_link">Sign in</li>
                     <li onclick="location.href='./signup'" class="sign_link">Sign up</li>
+                    {{ end }}
                 </ul>
             </div>
             

@@ -104,6 +104,20 @@ body {
     overflow: hidden;
 }
 
+.profile_link {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+    color: #E9EAEC;
+}
+
+.profile_link:hover {
+    cursor: pointer;
+    color: #333652;
+    background-color: #E9EAEC;
+}
+
 .sign_link {
     display: block;
     text-align: center;
