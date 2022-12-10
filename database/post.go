@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"fmt"
 )
 
 func (post *Post) Create(db *sql.DB) (err error) {
@@ -36,4 +37,53 @@ func (post *Post) Update(db *sql.DB, newTitle, newMessage string) (err error) {
 	post.Message = newMessage
 
 	return
+}
+
+func GetAllPost(db *sql.DB) ([]Post, error) {
+	statement := "SELECT * FROM posts"
+
+	rows, err := db.Query(statement)
+	if err != nil {
+		return nil, fmt.Errorf("get all posts: %w", err)
+	}
+
+	defer rows.Close()
+
+	var result []Post
+
+	for rows.Next() {
+		var post Post
+		err := rows.Scan(&post.Id, &post.Title, &post.Message,
+			&post.Author, &post.Like, &post.Dislike)
+		if err != nil {
+			return nil, fmt.Errorf("get all posts: %w", err)
+		}
+
+		result = append(result, post)
+	}
+
+	return result, nil
+}
+
+func GetPostByCategory(db *sql.DB, category string) ([]Post, error) {
+	var result []Post
+
+	statement := "SELECT * FROM posts WHERE id IN (SELECT post_id FROM categories WHERE name = $1)"
+	rows, err := db.Query(statement, category)
+	if err != nil {
+		return nil, fmt.Errorf("get post by category: %w", err)
+	}
+
+	for rows.Next() {
+		var post Post
+		err = rows.Scan(&post.Id, &post.Title, &post.Message,
+			&post.Author, &post.Like, &post.Dislike)
+		if err != nil {
+			return nil, fmt.Errorf("get all posts: %w", err)
+		}
+
+		result = append(result, post)
+	}
+
+	return result, nil
 }
