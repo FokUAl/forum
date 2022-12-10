@@ -187,7 +187,7 @@ func (app *application) profile(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("./ui/template/profile.html")
 	if err != nil {
 		log.Println(err.Error())
-		http.Error(w, "File not found: post.html", 500)
+		http.Error(w, "File not found: profile.html", 500)
 		return
 	}
 
@@ -196,4 +196,28 @@ func (app *application) profile(w http.ResponseWriter, r *http.Request) {
 		log.Println(err.Error())
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	}
+}
+
+func (app *application) logOut(w http.ResponseWriter, r *http.Request) {
+	c, err := r.Cookie("session_token")
+	if err != nil {
+		if err == http.ErrNoCookie {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+		// For any other type of error, return a bad request status
+		w.WriteHeader(http.StatusBadRequest)
+		return
+
+	}
+	sessionToken := c.Value
+	database.DeleteSession(app.database, sessionToken)
+
+	http.SetCookie(w, &http.Cookie{
+		Name:    "session_token",
+		Value:   "",
+		Expires: time.Now(),
+	})
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
