@@ -22,9 +22,9 @@
                 <ul class="signs">
                     {{ if .User.Nickname }}
                     <li class="profile_drop">
-                        <div class="dropbtn">{{ .User.Nickname }}</div>
+                        <div class="dropbtn">{{ .Nickname }}</div>
                         <div class="dropdown_content">
-                            <a href="./profile/{{.User.Nickname}}">Profile</a>
+                            <a href="./profile/{{.Nickname}}">Profile</a>
                             <a href="/logout">Log Out</a>
                         </div>
                     </li>
@@ -37,50 +37,20 @@
             
         </header>
         <div class="line">
+            {{ range .Posts }}
             <div class="post">
                 <div class="title_author">
-                    <div onclick="location.href='./post'" class="title">Title Name</div>
-                    <div class="author">Author</div>
+                    <div onclick="location.href='./post'" class="title">{{ .Title }}</div>
+                    <div class="author">{{ .Author }}</div>
                 </div>
                 <div class="border"></div>
                 <div class="categories">
-                    <div class="categorie">cat.1</div>
-                    <div class="categorie">cat.2</div>
+                    {{ range .Categories }}
+                    <div class="categorie">{{ . }}</div>
+                    {{ end }}
                 </div>
             </div>
-            <div class="post">
-                <div class="title_author">
-                    <div onclick="location.href='./post'" class="title">Title Name</div>
-                    <div class="author">Author</div>
-                </div>
-                <div class="border"></div>
-                <div class="categories">
-                    <div class="categorie">cat.1</div>
-                    <div class="categorie">cat.2</div>
-                </div>
-            </div>
-            <div class="post">
-                <div class="title_author">
-                    <div onclick="location.href='./post'" class="title">Title Name</div>
-                    <div class="author">Author</div>
-                </div>
-                <div class="border"></div>
-                <div class="categories">
-                    <div class="categorie">cat.1</div>
-                    <div class="categorie">cat.2</div>
-                </div>
-            </div>
-            <div class="post">
-                <div class="title_author">
-                    <div onclick="location.href='./post'" class="title">Title Name</div>
-                    <div class="author">Author</div>
-                </div>
-                <div class="border"></div>
-                <div class="categories">
-                    <div class="categorie">cat.1</div>
-                    <div class="categorie">cat.2</div>
-                </div>
-            </div>
+            {{ end }}
         </div>
         <footer>
             <div class="authors">Development by @HgCl2 & @aleebeg</div>

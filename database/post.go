@@ -53,8 +53,9 @@ func GetAllPost(db *sql.DB) ([]Post, error) {
 
 	for rows.Next() {
 		var post Post
+		var user_id int
 		err := rows.Scan(&post.Id, &post.Title, &post.Message,
-			&post.Author, &post.Like, &post.Dislike)
+			&post.Author, &post.Like, &post.Dislike, &user_id)
 		if err != nil {
 			return nil, fmt.Errorf("get all posts: %w", err)
 		}

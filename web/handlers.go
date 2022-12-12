@@ -39,7 +39,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	user := app.checkUser(w, r)
 	posts, err := database.GetAllPost(app.database)
 	if err != nil {
-		http.Error(w, "home: get all post: internal error", http.StatusInternalServerError)
+		http.Error(w, "home: get all post: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
