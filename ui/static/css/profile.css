@@ -1,0 +1,215 @@
+*,
+*:before,
+*:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+    color:#F4EBD0;
+}
+
+/* BODY */
+body {
+    margin: 0;
+    font-family: 'Roboto Mono', monospace;
+
+    font-size: 18px;
+    line-height: 1.6;    
+    
+    max-width: 1400px;
+    margin: 0 auto;
+
+    color: #333652;
+}
+
+.bg {
+    animation:slide 10s ease-in-out infinite alternate;
+    background-image: linear-gradient(-60deg, #333652 50%, #E9EAEC 50%);
+    bottom:0;
+    left:-50%;
+    opacity:.5;
+    position:fixed;
+    right:-50%;
+    top:0;
+    z-index:-1;
+}
+  
+.bg2 {
+    animation-direction:alternate-reverse;
+    animation-duration:15s;
+}
+  
+.bg3 {
+    animation-duration:20s;
+}
+
+@keyframes slide {
+    0% {
+      transform:translateX(-25%);
+    }
+    100% {
+      transform:translateX(25%);
+    }
+}
+
+/* HEADER */
+.logo_reg {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px auto;
+    background-color:#333652;
+}
+
+.logo {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.logo_link {
+    font-size: 25px;
+    text-align: center;
+    padding: 12px;
+    color: #E9EAEC;
+}
+
+.logo:hover {
+    cursor: pointer;
+}
+
+.signs {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.dropbtn {
+    display: inline-block;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+    color: #E9EAEC;
+    position: relative;
+}
+
+.profile_drop:hover {
+    cursor: pointer;
+    color: #333652;
+    background-color: #E9EAEC;
+}
+
+.dropdown_content {
+    display: none;
+    position: absolute;
+    background-color: #E9EAEC;
+    z-index:1;
+}
+
+.dropdown_content a {
+    color: #333652;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-bottom:#333652 2px solid; 
+    border-left:#333652 2px solid;
+    border-right:#333652 2px solid;
+}
+
+.dropdown_content a:hover {
+    background-color: #333652;
+    color: #E9EAEC;
+}
+
+.profile_drop:hover .dropdown_content {
+    display: block;
+}
+
+.profile_drop:hover .dropbtn {
+    color:#333652;
+    border:#333652 2px solid;
+}
+
+.sign_link {
+    display: block;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+    color: #E9EAEC;
+}
+
+.sign_link:hover {
+    cursor: pointer;
+    color: #333652;
+    background-color: #E9EAEC;
+}
+
+/* PROFILE */
+
+.main {
+    display: block;
+    margin: 0 auto;
+    max-width: 300px;
+    width: 100%;
+    height: 100%;
+    border: 2px solid;
+    margin-bottom: 15px;
+    background-color: #E9EAEC;
+    text-align: center;
+    overflow: hidden;
+}
+
+.main_nickname {
+    width: 100%;
+    padding: 20px 0;
+    border-bottom: 2px solid;
+}
+
+.change_btn {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    border: 2ps solid;
+    background-color: #333652;
+    color:#E9EAEC;
+
+    width: 200px;
+    margin: 0 auto;
+    padding: 5px 10px;
+}
+
+.change_btn:hover {
+    background-color: #E9EAEC;
+    color:#333652
+}
+
+/* FOOTER */
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
