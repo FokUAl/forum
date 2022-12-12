@@ -11,6 +11,11 @@ import (
 	"github.com/gofrs/uuid"
 )
 
+type info struct {
+	Posts []database.Post
+	User  database.User
+}
+
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
@@ -27,13 +32,23 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	t, err := template.ParseFiles("./ui/template/home.html")
 	if err != nil {
 		log.Println(err.Error())
-		http.Error(w, "File not found: index.html", 500)
+		http.Error(w, "File not found: home.html", 500)
 		return
 	}
 
 	user := app.checkUser(w, r)
-	// fmt.Println(user)
-	err = t.Execute(w, user)
+	posts, err := database.GetAllPost(app.database)
+	if err != nil {
+		http.Error(w, "home: get all post: internal error", http.StatusInternalServerError)
+		return
+	}
+
+	new_info := info{
+		User:  user,
+		Posts: posts,
+	}
+	err = t.Execute(w, new_info)
+
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -60,7 +75,9 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = t.Execute(w, nil)
+	user := app.checkUser(w, r)
+
+	err = t.Execute(w, user)
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

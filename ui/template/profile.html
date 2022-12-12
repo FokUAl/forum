@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="../static/css/profile.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&family=Roboto+Mono:wght@200;400&display=swap" rel="stylesheet">
+        <title>Forum</title>
+    </head>
+    <body>
+        <div class="bg"></div>
+        <div class="bg bg2"></div>
+        <div class="bg bg3"></div>
+        <header>
+            <div class="logo_reg">
+                <ul class="logo">
+                    <li onclick="location.href='/'" class="logo_link">Forum</li>
+                </ul>
+                <ul class="signs">
+                    {{ if .Nickname }}
+                    <li class="profile_drop">
+                        <div class="dropbtn">{{ .Nickname }}</div>
+                        <div class="dropdown_content">
+                            <a href="./{{.Nickname}}">Profile</a>
+                            <a href="/logout">Log Out</a>
+                        </div>
+                    </li>
+                    {{ else }}
+                    <li onclick="location.href='./signin'" class="sign_link">Sign in</li>
+                    <li onclick="location.href='./signup'" class="sign_link">Sign up</li>
+                    {{ end }}
+                </ul>
+            </div>
+        </header>
+        <div class="main">
+            <div class="main_nickname">{{ .Nickname }}</div>
+            <div class="main_desc">
+                <div class="main_firstName">First Name: {{ .Firstname }}</div>
+                <div class="main_lastName">Last Name: {{ .Lastname }}</div>
+                <div class="main_mail">Email: {{ .Email }}</div>
+            </div>
+        </div>
+        <div class="change_btn">Change password</div>
+        <footer>
+            <div class="authors">Development by @HgCl2 & @aleebeg</div>
+            <div class="year">2022</div>
+        </footer>
+    </body>
+</html>

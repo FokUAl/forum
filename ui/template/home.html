@@ -20,11 +20,11 @@
                     <li onclick="location.href='./'" class="logo_link">Forum</li>
                 </ul>
                 <ul class="signs">
-                    {{ if .Nickname }}
+                    {{ if .User.Nickname }}
                     <li class="profile_drop">
-                        <div class="dropbtn">{{ .Nickname }}</div>
+                        <div class="dropbtn">{{ .User.Nickname }}</div>
                         <div class="dropdown_content">
-                            <a href="./profile/{{.Nickname}}">Profile</a>
+                            <a href="./profile/{{.User.Nickname}}">Profile</a>
                             <a href="/logout">Log Out</a>
                         </div>
                     </li>
