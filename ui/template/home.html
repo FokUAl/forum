@@ -17,7 +17,7 @@
         <header>
             <div class="logo_reg">
                 <ul class="logo">
-                    <li onclick="location.href='./'" class="logo_link">Forum</li>
+                    <li onclick="location.href='/'" class="logo_link">Forum</li>
                 </ul>
                 <ul class="signs">
                     {{ if .User.Nickname }}
@@ -40,7 +40,7 @@
             {{ range .Posts }}
             <div class="post">
                 <div class="title_author">
-                    <div onclick="location.href='./post'" class="title">{{ .Title }}</div>
+                    <div onclick="location.href='./post/{{.Id}}'" class="title">{{ .Title }}</div>
                     <div class="author">{{ .Author }}</div>
                 </div>
                 <div class="border"></div>

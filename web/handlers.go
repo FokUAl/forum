@@ -6,14 +6,18 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gofrs/uuid"
 )
 
 type info struct {
-	Posts []database.Post
-	User  database.User
+	Posts    []database.Post
+	User     database.User
+	Post     database.Post
+	Comments []database.Comment
 }
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -62,11 +66,20 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.URL.Path != "/post" {
-		http.NotFound(w, r)
-		w.WriteHeader(http.StatusNotFound)
+	post_id_str := strings.TrimPrefix(r.URL.Path, "/post/")
+	post_id, err := strconv.ParseInt(post_id_str, 10, 32)
+	if err != nil {
+		http.Error(w, "post: Internal Error", http.StatusInternalServerError)
 		return
 	}
+
+	post, err := database.GetPost(app.database, int(post_id))
+	if err != nil {
+		http.Error(w, "post: Internal Error", http.StatusInternalServerError)
+		return
+	}
+
+	comments, err := database.GetAllCommentsByPost(app.database, post.Id)
 
 	t, err := template.ParseFiles("./ui/template/post.html")
 	if err != nil {
@@ -77,7 +90,13 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 
 	user := app.checkUser(w, r)
 
-	err = t.Execute(w, user)
+	new_info := info{
+		User:     user,
+		Post:     post,
+		Comments: comments,
+	}
+
+	err = t.Execute(w, new_info)
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

@@ -37,9 +37,8 @@ func Run(port string) error {
 		database: dbHandler,
 	}
 
-	// TO DO
 	mux.HandleFunc("/", app.home)
-	mux.HandleFunc("/post", app.post)
+	mux.HandleFunc("/post/", app.post)
 	mux.HandleFunc("/signup", app.signUp)
 	mux.HandleFunc("/signin", app.signIn)
 	mux.HandleFunc("/profile/", app.profile)
