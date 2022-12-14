@@ -47,3 +47,16 @@ func (user *User) ChangePassword(db *sql.DB, new_password string) error {
 
 	return err
 }
+
+func IsNicknameExist(db *sql.DB, nick string) (bool, error) {
+	var existing_id int
+	err := db.QueryRow("SELECT id FROM users WHERE nickname = $1",
+		nick).Scan(&existing_id)
+	if err == sql.ErrNoRows {
+		return false, nil
+	} else if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
