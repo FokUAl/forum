@@ -42,17 +42,24 @@ func GetAllCommentsByPost(db *sql.DB, post_id int) ([]Comment, error) {
 
 	rows, err := db.Query(statement, post_id)
 	if err != nil {
-		return nil, fmt.Errorf("get comments: %w", err)
+		return nil, fmt.Errorf("get comments by post: %w", err)
 	}
 
 	for rows.Next() {
 		var comment Comment
 
-		err = rows.Scan(&comment.Id, &comment.Content, &comment.Author, &comment.Like, &comment.Dislike)
+		post, err := GetPost(db, post_id)
 		if err != nil {
-			return nil, fmt.Errorf("get comments: %w", err)
+			return nil, fmt.Errorf("get comments by post: %w", err)
 		}
 
+		var _id int
+		err = rows.Scan(&comment.Id, &comment.Content, &comment.Author, &comment.Like, &comment.Dislike, &_id)
+		if err != nil {
+			return nil, fmt.Errorf("get comments by post: %w", err)
+		}
+
+		comment.Post = &post
 		result = append(result, comment)
 	}
 

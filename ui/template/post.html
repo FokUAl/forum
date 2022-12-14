@@ -62,7 +62,7 @@
             </div>
             <form action="/post/{{ .Post.Id }}" method="post" class="comment_area">
                 Your comment
-                <input id ="Comment" class="textarea_comment" rows="4" cols="50"></input>
+                <input name ="comment" class="textarea_comment" rows="4" cols="50"></input>
                 <input class="submit_comment" type="submit" value="Submit">
             </div>
             {{ range .Comments }}

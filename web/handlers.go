@@ -60,12 +60,6 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) post(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
-
 	post_id_str := strings.TrimPrefix(r.URL.Path, "/post/")
 	post_id, err := strconv.ParseInt(post_id_str, 10, 32)
 	if err != nil {
@@ -73,33 +67,55 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user := app.checkUser(w, r)
 	post, err := database.GetPost(app.database, int(post_id))
 	if err != nil {
 		http.Error(w, "post: Internal Error", http.StatusInternalServerError)
 		return
 	}
 
-	comments, err := database.GetAllCommentsByPost(app.database, post.Id)
+	switch r.Method {
+	case http.MethodGet:
+		comments, err := database.GetAllCommentsByPost(app.database, post.Id)
+		if err != nil {
+			http.Error(w, "post: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-	t, err := template.ParseFiles("./ui/template/post.html")
-	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, "File not found: post.html", 500)
-		return
-	}
+		t, err := template.ParseFiles("./ui/template/post.html")
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, "File not found: post.html", 500)
+			return
+		}
 
-	user := app.checkUser(w, r)
+		new_info := info{
+			User:     user,
+			Post:     post,
+			Comments: comments,
+		}
 
-	new_info := info{
-		User:     user,
-		Post:     post,
-		Comments: comments,
-	}
+		err = t.Execute(w, new_info)
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+	case http.MethodPost:
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "StatusBadRequest", http.StatusBadRequest)
+			return
+		}
 
-	err = t.Execute(w, new_info)
-	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		comment_content := r.FormValue("comment")
+		comment := database.Comment{
+			Content: comment_content,
+			Author:  user.Nickname,
+			Post:    &post,
+		}
+
+		comment.Create(app.database)
+		http.Redirect(w, r, r.URL.Path, http.StatusSeeOther)
 	}
 }
 
