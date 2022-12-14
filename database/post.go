@@ -60,6 +60,13 @@ func GetAllPost(db *sql.DB) ([]Post, error) {
 			return nil, fmt.Errorf("get all posts: %w", err)
 		}
 
+		categories, err := GetAllCategoryByPost(db, user_id)
+		if err != nil {
+			return nil, fmt.Errorf("get all posts: %w", err)
+		}
+
+		post.Categories = categories
+
 		result = append(result, post)
 	}
 
