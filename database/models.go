@@ -35,3 +35,10 @@ type Category struct {
 	Name string
 	Post []*Post
 }
+
+type Like struct {
+	Id       int
+	Nickname string
+	Value    int
+	Elem_Id  int
+}

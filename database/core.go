@@ -31,8 +31,7 @@ func Init() *sql.DB {
 
 	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS posts " +
 		"(id INTEGER PRIMARY KEY, title TEXT, message TEXT, author TEXT, " +
-		"like INTEGER DEFAULT 0, dislike INTEGER DEFAULT 0, user_id INTEGER," +
-		"FOREIGN KEY (user_id) REFERENCES users(id))")
+		"user_id INTEGER, FOREIGN KEY (user_id) REFERENCES users(id))")
 	if err != nil {
 		log.Fatal("Init: posts: " + err.Error())
 	}
@@ -48,8 +47,7 @@ func Init() *sql.DB {
 	statement.Exec()
 
 	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS comments " +
-		"(id INTEGER PRIMARY KEY, content TEXT, author TEXT, like INTEGER DEFAULT 0, " +
-		"dislike INTEGER DEFAULT 0, post_id INTEGER," +
+		"(id INTEGER PRIMARY KEY, content TEXT, author TEXT, post_id INTEGER," +
 		"FOREIGN KEY (post_id) REFERENCES posts(id) " +
 		"ON DELETE CASCADE)")
 	if err != nil {
@@ -65,7 +63,7 @@ func Init() *sql.DB {
 	statement.Exec()
 
 	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS comment_likes " +
-		"(id INTEGER PRIMARY KEY, nickname TEXT UNIQUE, comment_id INTEGER, " +
+		"(id INTEGER PRIMARY KEY, nickname TEXT UNIQUE, like INTEGER DEFAULT 0, comment_id INTEGER," +
 		"FOREIGN KEY (comment_id) REFERENCES comments(id) " +
 		"ON DELETE CASCADE)")
 	if err != nil {
@@ -74,7 +72,7 @@ func Init() *sql.DB {
 	statement.Exec()
 
 	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS post_likes " +
-		"(id INTEGER PRIMARY KEY, nickname TEXT UNIQUE, post_id INTEGER, " +
+		"(id INTEGER PRIMARY KEY, nickname TEXT UNIQUE, like INTEGER DEFAULT 0, post_id INTEGER, " +
 		"FOREIGN KEY (post_id) REFERENCES posts(id) " +
 		"ON DELETE CASCADE)")
 	if err != nil {
