@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func GetPostLike(db *sql.DB, post_id int) ([]Like, error) {
+func GetLikeByPost(db *sql.DB, post_id int) ([]Like, error) {
 	result := []Like{}
 
 	rows, err := db.Query("SELECT id, nickname, like FROM post_likes WHERE post_id = $1")
@@ -31,12 +31,29 @@ func GetPostLike(db *sql.DB, post_id int) ([]Like, error) {
 	return result, nil
 }
 
-// func UpdatePostLike(db *sql.DB, new_value int, post_id int) error {
-// 	_, err := db.Exec("UPDATE post_likes SET like = $1 WHERE post_id = $2",
-// 		new_value, post_id)
+func GetPostLikeByUser(db *sql.DB, nickname string, post_id int) (Like, error) {
+	result := Like{}
 
-// 	return err
-// }
+	err := db.QueryRow("SELECT id, like FROM post_likes "+
+		"WHERE nickname = $1 AND post_id = $2", nickname,
+		post_id).Scan(&result.Id, &result.Value)
+	if err != nil {
+		return result, fmt.Errorf("GetPostLikeByUser: %w", err)
+	}
+
+	result.Nickname = nickname
+	result.Elem_Id = post_id
+
+	return result, nil
+}
+
+func UpdatePostLike(db *sql.DB, new_value int, nickname string, post_id int) error {
+	_, err := db.Exec("UPDATE post_likes SET like = $1 "+
+		"WHERE nickname = $2 AND post_id = $3",
+		new_value, nickname, post_id)
+
+	return err
+}
 
 func CreatePostLike(db *sql.DB, nickname string, like int, post_id int) error {
 	statement := "INSERT INTO post_likes (nickname, like, post_id) VALUES ($1, $2, $3)"
