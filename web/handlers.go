@@ -63,16 +63,23 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 	post_id_str := strings.TrimPrefix(r.URL.Path, "/post/")
 	post_id, err := strconv.ParseInt(post_id_str, 10, 32)
 	if err != nil {
-		http.Error(w, "post: Internal Error", http.StatusInternalServerError)
+		http.Error(w, "post: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	user := app.checkUser(w, r)
 	post, err := database.GetPost(app.database, int(post_id))
 	if err != nil {
-		http.Error(w, "post: Internal Error", http.StatusInternalServerError)
+		http.Error(w, "post: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	post_likes, err := internal.CountLikes(app.database, post.Id)
+	if err != nil {
+		http.Error(w, "post: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	post.Like = post_likes
 
 	switch r.Method {
 	case http.MethodGet:
