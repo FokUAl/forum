@@ -23,8 +23,8 @@ func (comment *Comment) Delete(db *sql.DB) (err error) {
 }
 
 func GetComment(db *sql.DB, id int) (comment Comment, err error) {
-	err = db.QueryRow("SELECT content, author, like, dislike FROM comments WHERE id = $1",
-		id).Scan(&comment.Content, comment.Author, comment.Like, comment.Dislike)
+	err = db.QueryRow("SELECT content, author, FROM comments WHERE id = $1",
+		id).Scan(&comment.Content, comment.Author)
 	return
 }
 
@@ -54,7 +54,7 @@ func GetAllCommentsByPost(db *sql.DB, post_id int) ([]Comment, error) {
 		}
 
 		var _id int
-		err = rows.Scan(&comment.Id, &comment.Content, &comment.Author, &comment.Like, &comment.Dislike, &_id)
+		err = rows.Scan(&comment.Id, &comment.Content, &comment.Author, &_id)
 		if err != nil {
 			return nil, fmt.Errorf("get comments by post: %w", err)
 		}

@@ -62,7 +62,7 @@ func GetAllPost(db *sql.DB) ([]Post, error) {
 		var post Post
 		var user_id int
 		err := rows.Scan(&post.Id, &post.Title, &post.Message,
-			&post.Author, &post.Like, &post.Dislike, &user_id)
+			&post.Author, &user_id)
 		if err != nil {
 			return nil, fmt.Errorf("get all posts: %w", err)
 		}
@@ -92,7 +92,7 @@ func GetPostByCategory(db *sql.DB, category string) ([]Post, error) {
 	for rows.Next() {
 		var post Post
 		err = rows.Scan(&post.Id, &post.Title, &post.Message,
-			&post.Author, &post.Like, &post.Dislike)
+			&post.Author)
 		if err != nil {
 			return nil, fmt.Errorf("get all posts: %w", err)
 		}

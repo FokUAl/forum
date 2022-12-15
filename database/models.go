@@ -7,7 +7,6 @@ type Post struct {
 	Author     string
 	User_Id    int
 	Like       int
-	Dislike    int
 	Categories []string
 }
 
@@ -26,7 +25,6 @@ type Comment struct {
 	Content string
 	Author  string
 	Like    int
-	Dislike int
 	Post    *Post
 }
 
