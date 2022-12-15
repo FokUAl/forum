@@ -16,7 +16,7 @@ func Init() *sql.DB {
 
 	statement, err := db.Prepare("PRAGMA foreign_keys = 1")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Init: " + err.Error())
 	}
 	statement.Exec()
 
@@ -25,7 +25,7 @@ func Init() *sql.DB {
 		"(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, nickname TEXT UNIQUE," +
 		"password TEXT, email TEXT UNIQUE)")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Init: users: " + err.Error())
 	}
 	statement.Exec()
 
@@ -34,7 +34,7 @@ func Init() *sql.DB {
 		"like INTEGER DEFAULT 0, dislike INTEGER DEFAULT 0, user_id INTEGER," +
 		"FOREIGN KEY (user_id) REFERENCES users(id))")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Init: posts: " + err.Error())
 	}
 	statement.Exec()
 
@@ -43,7 +43,7 @@ func Init() *sql.DB {
 		"FOREIGN KEY (post_id) REFERENCES posts(id) " +
 		"ON DELETE CASCADE)")
 	if err != nil {
-		log.Fatalf("1: %s", err.Error())
+		log.Fatalf("Init: categories: " + err.Error())
 	}
 	statement.Exec()
 
@@ -53,14 +53,32 @@ func Init() *sql.DB {
 		"FOREIGN KEY (post_id) REFERENCES posts(id) " +
 		"ON DELETE CASCADE)")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Init: comments: " + err.Error())
 	}
 	statement.Exec()
 
 	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS sessions " +
 		"(id INTEGER PRIMARY KEY, nickname TEXT UNIQUE, session_token TEXT, expiry DATETIME)")
 	if err != nil {
-		log.Fatalf("1: %s", err.Error())
+		log.Fatalf("Init: sessions: " + err.Error())
+	}
+	statement.Exec()
+
+	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS comment_likes " +
+		"(id INTEGER PRIMARY KEY, nickname TEXT UNIQUE, comment_id INTEGER, " +
+		"FOREIGN KEY (comment_id) REFERENCES comments(id) " +
+		"ON DELETE CASCADE)")
+	if err != nil {
+		log.Fatalf("Init: comments_likes: " + err.Error())
+	}
+	statement.Exec()
+
+	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS post_likes " +
+		"(id INTEGER PRIMARY KEY, nickname TEXT UNIQUE, post_id INTEGER, " +
+		"FOREIGN KEY (post_id) REFERENCES posts(id) " +
+		"ON DELETE CASCADE)")
+	if err != nil {
+		log.Fatalf("Init: post_likes: " + err.Error())
 	}
 	statement.Exec()
 
