@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"forumAA/database"
 	"forumAA/internal"
 	"html/template"
@@ -279,4 +280,64 @@ func (app *application) logOut(w http.ResponseWriter, r *http.Request) {
 	})
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
+	user := app.checkUser(w, r)
+	if user.Id == 0 {
+		http.Error(w, "likeComment: unauthorized user", http.StatusUnauthorized)
+		return
+	}
+
+	comment_id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/post/like/"))
+	if err != nil {
+		http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "likeComment: method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	likes, err := database.GetLikeByComment(app.database, comment_id)
+	if err != nil {
+		http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = r.ParseForm()
+	if err != nil {
+		http.Error(w, "StatusBadRequest", http.StatusBadRequest)
+		return
+	}
+
+	likeValue, err := strconv.Atoi(r.FormValue("likeBtn"))
+	if err != nil {
+		http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	for _, like := range likes {
+		if like.Nickname == user.Nickname && like.Value != likeValue {
+			database.UpdateCommentLike(app.database, likeValue, user.Nickname, comment_id)
+			http.Redirect(w, r, fmt.Sprintf("/post/%d", comment_id), http.StatusSeeOther)
+		} else if like.Nickname == user.Nickname {
+			database.UpdateCommentLike(app.database, 0, user.Nickname, comment_id)
+			http.Redirect(w, r, fmt.Sprintf("/post/%d", comment_id), http.StatusSeeOther)
+		}
+	}
+
+	if likeValue > 0 {
+		err = database.CreateCommentLike(app.database, user.Nickname, 1, comment_id)
+	} else {
+		err = database.CreateCommentLike(app.database, user.Nickname, 1, comment_id)
+	}
+
+	if err != nil {
+		http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, fmt.Sprintf("/post/%d", comment_id), http.StatusSeeOther)
 }
