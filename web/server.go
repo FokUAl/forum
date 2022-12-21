@@ -39,8 +39,8 @@ func Run(port string) error {
 
 	mux.HandleFunc("/", app.home)
 	mux.HandleFunc("/post/", app.post)
-	mux.HandleFunc("/signup", app.signUp)
-	mux.HandleFunc("/signin", app.signIn)
+	mux.HandleFunc("/sign-up", app.signUp)
+	mux.HandleFunc("/sign-in", app.signIn)
 	mux.HandleFunc("/profile/", app.profile)
 	mux.HandleFunc("/logout", app.logOut)
 	mux.HandleFunc("/create-post", app.createPost)
