@@ -21,7 +21,7 @@
                 </ul>
                 <ul class="signs">
                     {{ if .User.Nickname }}
-                    <li onclick="location.href='./createPost'" class="create_btn">Create post</li>
+                    <li onclick="location.href='/create-post'" class="create_btn">Create post</li>
                     <li class="profile_drop">
                         <div class="dropbtn">{{ .User.Nickname }}</div>
                         <div class="dropdown_content">
@@ -30,8 +30,8 @@
                         </div>
                     </li>
                     {{ else }}
-                    <li onclick="location.href='./signin'" class="sign_link">Sign in</li>
-                    <li onclick="location.href='./signup'" class="sign_link">Sign up</li>
+                    <li onclick="location.href='./sign-in'" class="sign_link">Sign in</li>
+                    <li onclick="location.href='./sign-up'" class="sign_link">Sign up</li>
                     {{ end }}
                 </ul>
             </div>
