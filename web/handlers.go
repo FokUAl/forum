@@ -127,7 +127,7 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/signup" {
+	if r.URL.Path != "/sign-up" {
 		http.NotFound(w, r)
 		w.WriteHeader(http.StatusNotFound)
 		return
@@ -176,7 +176,7 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/signin" {
+	if r.URL.Path != "/sign-in" {
 		http.NotFound(w, r)
 		w.WriteHeader(http.StatusNotFound)
 		return
@@ -330,7 +330,7 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 
 	if likeValue > 0 {
 		err = database.CreateCommentLike(app.database, user.Nickname, 1, comment_id)
-	} else {
+	} else if likeValue < 0 {
 		err = database.CreateCommentLike(app.database, user.Nickname, -1, comment_id)
 	}
 
