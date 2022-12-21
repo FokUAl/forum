@@ -43,6 +43,7 @@ func Run(port string) error {
 	mux.HandleFunc("/signin", app.signIn)
 	mux.HandleFunc("/profile/", app.profile)
 	mux.HandleFunc("/logout", app.logOut)
+	mux.HandleFunc("/create-post", app.createPost)
 
 	mux.Handle("/static", http.NotFoundHandler())
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))

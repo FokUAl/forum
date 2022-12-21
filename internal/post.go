@@ -4,15 +4,28 @@ import (
 	"database/sql"
 	"fmt"
 	"forumAA/database"
+	"net/http"
 )
 
-func CreatePost(db *sql.DB) error {
-	// TO DO
-	// Read data from front
+func CreatePost(db *sql.DB, user database.User, r *http.Request) error {
+	err := r.ParseForm()
+	if err != nil {
+		return err
+	}
 
-	post := database.Post{}
+	title := r.FormValue("title")
+	message := r.FormValue("message")
+	categories := r.Form["category"]
 
-	err := post.Create(db)
+	post := database.Post{
+		Title:      title,
+		Message:    message,
+		Author:     user.Nickname,
+		User_Id:    user.Id,
+		Categories: categories,
+	}
+
+	err = post.Create(db)
 	return err
 }
 

@@ -340,3 +340,39 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 
 	http.Redirect(w, r, fmt.Sprintf("/post/%d", comment_id), http.StatusSeeOther)
 }
+
+func (app *application) createPost(w http.ResponseWriter, r *http.Request) {
+	user := app.checkUser(w, r)
+	if user.Id == 0 {
+		http.Error(w, "likeComment: unauthorized user", http.StatusUnauthorized)
+		return
+	}
+
+	if r.URL.Path != "/create-post" {
+		http.Error(w, "createPost: Not Found", http.StatusNotFound)
+	}
+
+	switch r.Method {
+	case http.MethodGet:
+		t, err := template.ParseFiles("./ui/template/createPost.html")
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, "File not found: signin.html", 500)
+			return
+		}
+
+		err = t.Execute(w, nil)
+		if err != nil {
+			log.Println(err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
+	case http.MethodPost:
+		err := internal.CreatePost(app.database, user, r)
+		if err != nil {
+			http.Error(w, "createPost: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	}
+}
