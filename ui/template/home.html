@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../static/css/style.css">
+        <link rel="stylesheet" href="../static/css/home.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&family=Roboto+Mono:wght@200;400&display=swap" rel="stylesheet">
@@ -21,6 +21,7 @@
                 </ul>
                 <ul class="signs">
                     {{ if .User.Nickname }}
+                    <li onclick="location.href='./createPost'" class="create_btn">Create post</li>
                     <li class="profile_drop">
                         <div class="dropbtn">{{ .User.Nickname }}</div>
                         <div class="dropdown_content">
