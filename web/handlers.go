@@ -74,7 +74,7 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	post_likes, err := internal.CountLikes(app.database, post.Id)
+	post_likes, err := internal.CountPostLikes(app.database, post.Id)
 	if err != nil {
 		http.Error(w, "post: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -87,6 +87,15 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			http.Error(w, "post: "+err.Error(), http.StatusInternalServerError)
 			return
+		}
+
+		for i := 0; i < len(comments); i++ {
+			comment_likes, err := internal.CountCommentLikes(app.database, comments[i].Id)
+			if err != nil {
+				http.Error(w, "post: "+err.Error(), http.StatusInternalServerError)
+				return
+			}
+			comments[i].Like = comment_likes
 		}
 
 		t, err := template.ParseFiles("./ui/template/post.html")
