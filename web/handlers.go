@@ -288,7 +288,8 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	comment_id, err := strconv.Atoi(strings.TrimPrefix(r.URL.Path, "/post/like/"))
+	comment_id_str := strings.TrimPrefix(r.URL.Path, "/comment/like/")
+	comment_id, err := strconv.Atoi(comment_id_str)
 	if err != nil {
 		http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -311,7 +312,7 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	likeValue, err := strconv.Atoi(r.FormValue("likeBtn"))
+	likeValue, err := strconv.Atoi(r.FormValue("commentLikeBtn"))
 	if err != nil {
 		http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
 		return
@@ -330,7 +331,7 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 	if likeValue > 0 {
 		err = database.CreateCommentLike(app.database, user.Nickname, 1, comment_id)
 	} else {
-		err = database.CreateCommentLike(app.database, user.Nickname, 1, comment_id)
+		err = database.CreateCommentLike(app.database, user.Nickname, -1, comment_id)
 	}
 
 	if err != nil {
@@ -344,12 +345,13 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 func (app *application) createPost(w http.ResponseWriter, r *http.Request) {
 	user := app.checkUser(w, r)
 	if user.Id == 0 {
-		http.Error(w, "likeComment: unauthorized user", http.StatusUnauthorized)
+		http.Error(w, "createPost: unauthorized user", http.StatusUnauthorized)
 		return
 	}
 
 	if r.URL.Path != "/create-post" {
 		http.Error(w, "createPost: Not Found", http.StatusNotFound)
+		return
 	}
 
 	switch r.Method {
