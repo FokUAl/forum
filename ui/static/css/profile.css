@@ -105,6 +105,20 @@ body {
     overflow: hidden;
 }
 
+.create_btn {
+    display: inline-block;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+    color: #E9EAEC;
+}
+
+.create_btn:hover {
+    cursor: pointer;
+    color: #333652;
+    background-color: #E9EAEC;
+}
+
 .dropbtn {
     display: inline-block;
     text-align: center;
