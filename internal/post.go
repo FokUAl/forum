@@ -46,10 +46,10 @@ func EditPost(db *sql.DB, title, message string) error {
 // 	return nil
 // }
 
-func CountLikes(db *sql.DB, post_id int) (int, error) {
+func CountPostLikes(db *sql.DB, post_id int) (int, error) {
 	likes, err := database.GetLikeByPost(db, post_id)
 	if err != nil {
-		return 0, fmt.Errorf("CountLikes: %w", err)
+		return 0, fmt.Errorf("CountPostLikes: %w", err)
 	}
 
 	result := 0

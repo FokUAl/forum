@@ -27,3 +27,18 @@ func EditComment(db *sql.DB) error {
 	err = comment.Update(db, newContent)
 	return err
 }
+
+func CountCommentLikes(db *sql.DB, comment_id int) (int, error) {
+	result := 0
+
+	likes, err := database.GetLikeByComment(db, comment_id)
+	if err != nil {
+		return result, err
+	}
+
+	for _, like := range likes {
+		result += like.Value
+	}
+
+	return result, nil
+}
