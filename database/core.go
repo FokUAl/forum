@@ -63,7 +63,7 @@ func Init() *sql.DB {
 	statement.Exec()
 
 	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS comment_likes " +
-		"(id INTEGER PRIMARY KEY, nickname TEXT UNIQUE, like INTEGER DEFAULT 0, comment_id INTEGER," +
+		"(id INTEGER PRIMARY KEY, nickname TEXT, like INTEGER DEFAULT 0, comment_id INTEGER," +
 		"FOREIGN KEY (comment_id) REFERENCES comments(id) " +
 		"ON DELETE CASCADE)")
 	if err != nil {

@@ -119,7 +119,7 @@ func UpdateCommentLike(db *sql.DB, new_value int, nickname string, comment_id in
 }
 
 func CreateCommentLike(db *sql.DB, nickname string, like int, comment_id int) error {
-	statement := "INSERT INTO comment_likes (nickname, like, comment_id) VALUES ($1, $2, $3)"
+	statement := "INSERT INTO comment_likes (nickname, like, comment_id) VALUES ($1, $2, $3) returning id"
 	stmt, err := db.Prepare(statement)
 	if err != nil {
 		return err
