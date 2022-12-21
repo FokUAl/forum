@@ -126,6 +126,7 @@ func CreateCommentLike(db *sql.DB, nickname string, like int, comment_id int) er
 	}
 
 	defer stmt.Close()
-	err = stmt.QueryRow(nickname, like, comment_id).Scan()
+	id := 0
+	err = stmt.QueryRow(nickname, like, comment_id).Scan(&id)
 	return err
 }
