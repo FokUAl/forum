@@ -11,13 +11,13 @@
         <div class="bg"></div>
         <div class="bg bg2"></div>
         <div class="bg bg3"></div>
+
         <header>
             <div class="logo_reg">
                 <ul class="logo">
                     <li onclick="location.href='/'" class="logo_link">Forum</li>
                 </ul>
                 <ul class="signs">
-                    {{ if .Nickname }}
                     <li class="profile_drop">
                         <div class="dropbtn">{{ .Nickname }}</div>
                         <div class="dropdown_content">
@@ -25,13 +25,10 @@
                             <a href="/logout">Log Out</a>
                         </div>
                     </li>
-                    {{ else }}
-                    <li onclick="location.href='./signin'" class="sign_link">Sign in</li>
-                    <li onclick="location.href='./signup'" class="sign_link">Sign up</li>
-                    {{ end }}
                 </ul>
             </div>
         </header>
+
         <div class="main">
             <div class="main_nickname">{{ .Nickname }}</div>
             <div class="main_desc">
@@ -41,9 +38,37 @@
             </div>
         </div>
         <div class="change_btn">Change password</div>
+
+        <div class="tabs">
+            <div class="tab_link" onclick="openFilter(event, 'Posts')" id="defaultOpen">Posts</div>
+            <div class="tab_link" onclick="openFilter(event, 'Likes')">Likes</div>
+        </div>
+        <div class="tab_content" id="Posts">Something about posts</div>
+        <div class="tab_content" id="Likes">Something about likes</div>
         <footer>
             <div class="authors">Development by @HgCl2 & @aleebeg</div>
             <div class="year">2022</div>
         </footer>
+
+        <script>
+            function openFilter(evt, filter) {
+            var i, tabcontent, tablinks;
+
+            tabcontent = document.getElementsByClassName("tab_content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+
+            tablinks = document.getElementsByClassName("tab_link");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+
+            document.getElementById(filter).style.display = "block";
+            evt.currentTarget.className += " active";
+            } 
+            
+            document.getElementById("defaultOpen").click();
+        </script>
     </body>
 </html>

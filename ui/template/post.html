@@ -51,26 +51,45 @@
                 </div>
                 <div class="border"></div>
                 <div class="description">
-                    {{.Post.Message}}
+                    {{ .Post.Message }}
                 </div>
             {{ end }}
             </div>
-            <div class="btns">
-                <div class="like_btn"><img class="like" src="../static/images/like_btn.png"></div>
+            {{ if .User.Nickname }}
+            <form class="btns" action="/post/like/{{ .Post.Id }}" method="post">
+                <input type="submit" name="postLikeBtn" value="1" class="like_btn"></input>
                 <div class="rating">0</div>
-                <div class="dislike_btn"><img class="like" src="../static/images/dislike_btn.png"></div>
-            </div>
+                <input type="submit" name="postLikeBtn" value="-1" class="dislike_btn"></input>
+            </form>
+            {{ end }}
+            {{ if .User.Nickname }}
             <form action="/post/{{ .Post.Id }}" method="post" class="comment_area">
                 Your comment
                 <input name ="comment" class="textarea_comment" rows="4" cols="50"></input>
                 <input class="submit_comment" type="submit" value="Submit">
-            </div>
-            {{ range .Comments }}
-            <div class="comments">
-                <div class="comment_author">{{ .Author }}</div>
-                <div class="border"></div>
-                <div class="comment">{{ .Content }}</div>
-            </div>
+            </form>
+            {{ end }}
+            {{ if .User.Nickname }}
+                {{ range .Comments }}
+                <div class="comments">
+                    <div class="comment_author">{{ .Author }}</div>
+                    <div class="border"></div>
+                    <div class="comment">{{ .Content }}</div>
+                </div>
+                <form class="btns" action="/comment/like/{{ .Id }}" method="post">
+                    <input type="submit" name="commentLikeBtn" value="1" class="like_btn"></input>
+                    <div class="rating">0</div>
+                    <input type="submit" name="commentLikeBtn" value="-1" class="dislike_btn"></input>
+                </form>
+                {{ end }}
+            {{ else }}
+                {{ range .Comments }}
+                <div class="comments">
+                    <div class="comment_author">{{ .Author }}</div>
+                    <div class="border"></div>
+                    <div class="comment">{{ .Content }}</div>
+                </div>
+                {{end}}
             {{ end }}
         </div>
         <footer>
