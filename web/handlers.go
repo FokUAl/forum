@@ -363,7 +363,7 @@ func (app *application) createPost(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = t.Execute(w, nil)
+		err = t.Execute(w, user)
 		if err != nil {
 			log.Println(err.Error())
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

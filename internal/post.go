@@ -13,8 +13,8 @@ func CreatePost(db *sql.DB, user database.User, r *http.Request) error {
 		return err
 	}
 
-	title := r.FormValue("title")
-	message := r.FormValue("message")
+	title := r.FormValue("postTitle")
+	message := r.FormValue("postMessage")
 	categories := r.Form["category"]
 
 	post := database.Post{
