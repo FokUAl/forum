@@ -200,6 +200,10 @@ body {
     margin: 0 auto;
 }
 
+.create_area label {
+    margin-left: 5px;
+}
+
 .name_textarea {
     width: 100%;
     border: 2px solid #333652;
@@ -228,6 +232,13 @@ body {
 .plus:hover, .minus:hover {
     background-color: #fff;
     color: #333652;
+}
+
+.error {
+    display: none;
+    margin-left: 10px;
+    font-size: 15px;
+    color: #693e38;
 }
 
 .cat_container {

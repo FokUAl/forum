@@ -42,6 +42,7 @@
                 <label class="cat_label">Categories</label>
                 <div class="plus" onclick="addCat()">+</div>
                 <div class="minus" onclick="removeCat()">-</div>
+                <div class="error">Every category must be unique</div>
             </div>
             <div class="cat_container" id="cat_container">
                 <input id="cat" type="text" name="postCat" class="cat_textarea" required></input>
@@ -58,6 +59,7 @@
             const addCat = () => {
                 const cat = document.getElementById('cat')
                 const clone = cat.cloneNode(true)
+                clone.value = ''
                 document.getElementById('cat_container').appendChild(clone)
             }
             const removeCat = () => {
@@ -66,6 +68,28 @@
                     cats.removeChild(cats.lastElementChild)
                 }
             }
+
+            const form = document.querySelector('#post');
+            const cats = document.getElementsByClassName('cat_textarea')
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const classArr = [];
+                const err = document.getElementsByClassName('error')
+
+                for(let i = 0; i < cats.length; i++) {
+                    if(classArr.indexOf(cats[i].value) != -1) {
+                        err[0].style.display = 'block'
+                        setTimeout(()=>{
+                            err[0].style.display = 'none'
+                        }, 1500)
+                        return false;
+                    }
+                    else
+                        classArr.push(cats[i].value);
+                }
+                form.submit();
+            });
         </script>
     </body>
 </html>
