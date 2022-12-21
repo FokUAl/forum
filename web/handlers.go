@@ -30,7 +30,6 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
-		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
