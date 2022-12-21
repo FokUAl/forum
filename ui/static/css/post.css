@@ -164,18 +164,14 @@ body {
     background-color: #E9EAEC;
 }
 
-
 /* POST */
-
-.post {
-
-}
 
 .post_area {
     width: 100%;
     border: solid 2px #333652;
     padding: 10px 15px;
     background-color: #E9EAEC;
+    margin-bottom: 20px;
 }
 
 .border {
@@ -228,11 +224,23 @@ body {
 }
 
 .like_btn {
+    background: url("../images/like_btn.png") no-repeat;
+    background-size: 17px;
     height: 17px;
+    width: 17px;
+    border: none;
+    font-size: 0;
+    cursor: pointer;
 }
 
 .dislike_btn {
+    background: url("../images/dislike_btn.png") no-repeat;
+    background-size: 17px;
     height: 17px;
+    width: 17px;
+    border: none;
+    font-size: 0;
+    cursor: pointer;
 }
 
 .comment_area {

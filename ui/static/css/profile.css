@@ -23,6 +23,7 @@ a:visited {
     color:#F4EBD0;
 }
 
+
 /* BODY */
 body {
     margin: 0;
@@ -189,7 +190,6 @@ body {
     cursor: pointer;
     display: flex;
     justify-content: center;
-    border: 2ps solid;
     background-color: #333652;
     color:#E9EAEC;
 
@@ -201,6 +201,40 @@ body {
 .change_btn:hover {
     background-color: #E9EAEC;
     color:#333652
+}
+
+/* TABS */
+
+.tabs {
+    display: flex;
+    overflow: hidden;
+    color: #E9EAEC;
+}
+
+.tabs div {
+    background-color: #333652;
+    float:left;
+    border: 2px solid;
+    border-radius: 0 20px 0 0;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-color: #333652;
+}
+
+.tabs div.active {
+    position: relative;
+    background-color: #E9EAEC;
+    color: #333652;
+    border-bottom: none;
+}
+
+.tab_content {
+    position: relative;
+    display: none;
+    padding: 6px 12px;
+    border: 2px solid #333652;
+    background-color: #E9EAEC;
+    border-top: none;
 }
 
 /* FOOTER */
