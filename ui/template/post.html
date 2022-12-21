@@ -79,7 +79,7 @@
                 </div>
                 <form class="btns" action="/comment/like/{{ .Id }}" method="post">
                     <input type="submit" name="commentLikeBtn" value="1" class="like_btn"></input>
-                    <div class="rating">0</div>
+                    <div class="rating">{{ .Like }}</div>
                     <input type="submit" name="commentLikeBtn" value="-1" class="dislike_btn"></input>
                 </form>
                 {{ end }}
@@ -89,6 +89,7 @@
                     <div class="comment_author">{{ .Author }}</div>
                     <div class="border"></div>
                     <div class="comment">{{ .Content }}</div>
+                    <div class="rating">{{ .Like }}</div>
                 </div>
                 {{end}}
             {{ end }}
