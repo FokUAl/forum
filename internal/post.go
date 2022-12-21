@@ -15,7 +15,7 @@ func CreatePost(db *sql.DB, user database.User, r *http.Request) error {
 
 	title := r.FormValue("postTitle")
 	message := r.FormValue("postMessage")
-	categories := r.Form["category"]
+	categories := r.Form["postCat"]
 
 	post := database.Post{
 		Title:      title,

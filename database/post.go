@@ -12,8 +12,15 @@ func (post *Post) Create(db *sql.DB) (err error) {
 		return
 	}
 
-	defer stmt.Close()
 	err = stmt.QueryRow(post.Title, post.Message, post.Author, post.User_Id).Scan(&post.Id)
+	if err != nil {
+		return err
+	}
+
+	stmt.Close()
+
+	err = CreateCategories(db, post.Categories, post.Id)
+
 	return
 }
 

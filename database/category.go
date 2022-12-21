@@ -34,3 +34,14 @@ func GetAllCategoryByPost(db *sql.DB, id int) ([]string, error) {
 
 	return result, nil
 }
+
+func CreateCategories(db *sql.DB, categories []string, post_id int) error {
+	for _, category := range categories {
+		_, err := db.Exec("INSERT INTO categories (name, post_id) VALUES ($1, $2)", category, post_id)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
