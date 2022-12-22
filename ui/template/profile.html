@@ -20,9 +20,9 @@
                 <ul class="signs">
                     <li onclick="location.href='/create-post'" class="create_btn">Create post</li>
                     <li class="profile_drop">
-                        <div class="dropbtn">{{ .Nickname }}</div>
+                        <div class="dropbtn">{{ .User.Nickname }}</div>
                         <div class="dropdown_content">
-                            <a href="./{{.Nickname}}">Profile</a>
+                            <a href="./{{.User.Nickname}}">Profile</a>
                             <a href="/logout">Log Out</a>
                         </div>
                     </li>
@@ -31,11 +31,11 @@
         </header>
 
         <div class="main">
-            <div class="main_nickname">{{ .Nickname }}</div>
+            <div class="main_nickname">{{ .User.Nickname }}</div>
             <div class="main_desc">
-                <div class="main_firstName">First Name: {{ .Firstname }}</div>
-                <div class="main_lastName">Last Name: {{ .Lastname }}</div>
-                <div class="main_mail">Email: {{ .Email }}</div>
+                <div class="main_firstName">First Name: {{ .User.Firstname }}</div>
+                <div class="main_lastName">Last Name: {{ .User.Lastname }}</div>
+                <div class="main_mail">Email: {{ .User.Email }}</div>
             </div>
         </div>
         <div class="change_btn">Change password</div>

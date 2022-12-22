@@ -260,7 +260,24 @@ func (app *application) profile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = t.Execute(w, user)
+	createdPosts, err := database.GetPostsByUser(app.database, user.Id)
+	if err != nil {
+		http.Error(w, "profile: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	likedPost, err := database.GetPostsLikedByUser(app.database, user.Nickname)
+	if err != nil {
+		http.Error(w, "profile: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	new_info := info{
+		User:       user,
+		Posts:      createdPosts,
+		LikedPosts: likedPost,
+	}
+	err = t.Execute(w, new_info)
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)

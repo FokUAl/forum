@@ -113,7 +113,7 @@ func GetPostByCategory(db *sql.DB, category string) ([]Post, error) {
 func GetPostsByUser(db *sql.DB, user_id int) ([]Post, error) {
 	var result []Post
 
-	statement := "SELECT * FROM posts WHERE user_id = $1"
+	statement := "SELECT id, title, message, author FROM posts WHERE user_id = $1"
 
 	rows, err := db.Query(statement, user_id)
 	if err != nil {
