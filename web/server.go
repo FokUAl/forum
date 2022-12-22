@@ -45,7 +45,7 @@ func Run(port string) error {
 	mux.HandleFunc("/logout", app.logOut)
 	mux.HandleFunc("/create-post", app.createPost)
 	mux.HandleFunc("/comment/like/", app.likeComment)
-	// mux.HandleFunc("/post/like/", app.likePost)
+	mux.HandleFunc("/post/like/", app.likePost)
 
 	mux.Handle("/static", http.NotFoundHandler())
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))

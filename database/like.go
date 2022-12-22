@@ -56,14 +56,15 @@ func UpdatePostLike(db *sql.DB, new_value int, nickname string, post_id int) err
 }
 
 func CreatePostLike(db *sql.DB, nickname string, like int, post_id int) error {
-	statement := "INSERT INTO post_likes (nickname, like, post_id) VALUES ($1, $2, $3)"
+	statement := "INSERT INTO post_likes (nickname, like, post_id) VALUES ($1, $2, $3) returning id"
 	stmt, err := db.Prepare(statement)
 	if err != nil {
 		return err
 	}
 
 	defer stmt.Close()
-	err = stmt.QueryRow(nickname, like, post_id).Scan()
+	id := 0
+	err = stmt.QueryRow(nickname, like, post_id).Scan(&id)
 	return err
 }
 

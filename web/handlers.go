@@ -15,10 +15,11 @@ import (
 )
 
 type info struct {
-	Posts    []database.Post
-	User     database.User
-	Post     database.Post
-	Comments []database.Comment
+	Posts      []database.Post
+	User       database.User
+	Post       database.Post
+	Comments   []database.Comment
+	LikedPosts []database.Post
 }
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -309,12 +310,6 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// like, err := database.GetLikeByComment(app.database, comment_id)
-	// if err != nil {
-	// 	http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
-	// 	return
-	// }
-
 	like, err := database.GetCommentLikeByUser(app.database, user.Nickname, comment_id)
 
 	err = r.ParseForm()
@@ -382,4 +377,54 @@ func (app *application) createPost(w http.ResponseWriter, r *http.Request) {
 
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}
+}
+
+func (app *application) likePost(w http.ResponseWriter, r *http.Request) {
+	user := app.checkUser(w, r)
+	if user.Id == 0 {
+		http.Error(w, "likePost: unauthorized user", http.StatusUnauthorized)
+		return
+	}
+
+	post_id_str := strings.TrimPrefix(r.URL.Path, "/post/like/")
+	post_id, err := strconv.Atoi(post_id_str)
+	if err != nil {
+		http.Error(w, "likePost: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "likePost: method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	like, err := database.GetPostLikeByUser(app.database, user.Nickname, post_id)
+
+	err = r.ParseForm()
+	if err != nil {
+		http.Error(w, "StatusBadRequest", http.StatusBadRequest)
+		return
+	}
+
+	likeValue, err := strconv.Atoi(r.FormValue("postLikeBtn"))
+	if err != nil {
+		http.Error(w, "likePost: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	if like.Id == 0 && likeValue > 0 {
+		err = database.CreatePostLike(app.database, user.Nickname, 1, post_id)
+	} else if like.Id == 0 && likeValue < 0 {
+		err = database.CreatePostLike(app.database, user.Nickname, -1, post_id)
+	} else if likeValue == like.Value {
+		err = database.UpdatePostLike(app.database, 0, user.Nickname, post_id)
+	} else if likeValue != like.Value {
+		err = database.UpdatePostLike(app.database, likeValue, user.Nickname, post_id)
+	}
+
+	if err != nil {
+		http.Error(w, "likePost: "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, fmt.Sprintf("/post/%d", post_id), http.StatusSeeOther)
 }
