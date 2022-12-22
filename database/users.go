@@ -60,3 +60,9 @@ func IsNicknameExist(db *sql.DB, nick string) (bool, error) {
 
 	return true, nil
 }
+
+func CheckEmail(db *sql.DB, email string) error {
+	_, err := db.Query("SELECT * FROM users WHERE email = $1", email)
+
+	return err
+}
