@@ -109,3 +109,27 @@ func GetPostByCategory(db *sql.DB, category string) ([]Post, error) {
 
 	return result, nil
 }
+
+func GetPostsByUser(db *sql.DB, user_id int) ([]Post, error) {
+	var result []Post
+
+	statement := "SELECT * FROM posts WHERE user_id = $1"
+
+	rows, err := db.Query(statement, user_id)
+	if err != nil {
+		return nil, err
+	}
+
+	for rows.Next() {
+		var post Post
+		err = rows.Scan(&post.Id, &post.Title, &post.Message,
+			&post.Author)
+		if err != nil {
+			return nil, fmt.Errorf("get all posts: %w", err)
+		}
+
+		result = append(result, post)
+	}
+
+	return result, nil
+}
