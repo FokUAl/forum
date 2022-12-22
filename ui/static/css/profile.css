@@ -251,6 +251,47 @@ body {
     border-top: none;
 }
 
+/* POSTS */
+
+.post {
+    border: 2px solid;
+    padding: 10px 15px 0px 15px;
+    margin-bottom: 15px;
+    background-color: #E9EAEC;
+}
+
+.title_author {
+    display: flex;
+    justify-content: space-between;
+}
+
+.border {
+    border-bottom: 2px solid;
+    margin: 5px -15px;
+}
+
+.title {
+    font-size: 23px;
+}
+
+.title:hover {
+    cursor: pointer;
+}
+
+.categories {
+    margin: 10px auto;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.categorie {
+    font-size: 14px;
+    border: 1px solid;
+    margin: auto 5px;
+    padding: 3px;
+    overflow: hidden
+}
+
 /* FOOTER */
 
 footer {

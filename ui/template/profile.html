@@ -44,8 +44,45 @@
             <div class="tab_link" onclick="openFilter(event, 'Posts')" id="defaultOpen">Posts</div>
             <div class="tab_link" onclick="openFilter(event, 'Likes')">Likes</div>
         </div>
-        <div class="tab_content" id="Posts">Something about posts</div>
-        <div class="tab_content" id="Likes">Something about likes</div>
+
+        <div class="tab_content" id="Posts">
+            {{ range .Posts }}
+            <div class="post">
+                <div class="title_author">
+                    <div onclick="location.href='/post/{{.Id}}'" class="title">{{ .Title }}</div>
+                    <div class="author">{{ .Author }}</div>
+                </div>
+                <div class="border"></div>
+                <div class="categories">
+                    {{ range .Categories }}
+                    <div class="categorie">{{ . }}</div>
+                    {{ end }}
+                </div>
+            </div>
+            {{ else }}
+            <div class="no_posts">You don't have any created posts</div>
+            {{ end }}
+        </div>
+
+        <div class="tab_content" id="Likes">
+            {{ range .LikedPosts }}
+            <div class="post">
+                <div class="title_author">
+                    <div onclick="location.href='/post/{{.Id}}'" class="title">{{ .Title }}</div>
+                    <div class="author">{{ .Author }}</div>
+                </div>
+                <div class="border"></div>
+                <div class="categories">
+                    {{ range .Categories }}
+                    <div class="categorie">{{ . }}</div>
+                    {{ end }}
+                </div>
+            </div>
+            {{ else }}
+            <div class="no_posts">You didn't like any posts</div>
+            {{ end }}
+        </div>
+
         <footer>
             <div class="authors">Development by @HgCl2 & @aleebeg</div>
             <div class="year">2022</div>
