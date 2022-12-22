@@ -220,6 +220,7 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 		err = internal.Login(app.database, nick, password)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
 		}
 
 		sessionToken, err := uuid.NewV4()
