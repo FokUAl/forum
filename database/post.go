@@ -101,7 +101,7 @@ func GetPostByCategory(db *sql.DB, category string) ([]Post, error) {
 		err = rows.Scan(&post.Id, &post.Title, &post.Message,
 			&post.Author)
 		if err != nil {
-			return nil, fmt.Errorf("get all posts: %w", err)
+			return nil, fmt.Errorf("get postsby category: %w", err)
 		}
 
 		result = append(result, post)
@@ -125,10 +125,32 @@ func GetPostsByUser(db *sql.DB, user_id int) ([]Post, error) {
 		err = rows.Scan(&post.Id, &post.Title, &post.Message,
 			&post.Author)
 		if err != nil {
-			return nil, fmt.Errorf("get all posts: %w", err)
+			return nil, fmt.Errorf("get posts by user: %w", err)
 		}
 
 		result = append(result, post)
+	}
+
+	return result, nil
+}
+
+func GetPostsLikedByUser(db *sql.DB, nickname string) ([]Post, error) {
+	var result []Post
+
+	likes, err := GetPostLikesByUser(db, nickname)
+	if err != nil {
+		return nil, fmt.Errorf("get post likes by user: %w", err)
+	}
+
+	for _, like := range likes {
+		if like.Nickname == nickname {
+			post, err := GetPost(db, like.Elem_Id)
+			if err != nil {
+				return nil, fmt.Errorf("get post likes by user: %w", err)
+			}
+
+			result = append(result, post)
+		}
 	}
 
 	return result, nil

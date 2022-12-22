@@ -131,3 +131,30 @@ func CreateCommentLike(db *sql.DB, nickname string, like int, comment_id int) er
 	err = stmt.QueryRow(nickname, like, comment_id).Scan(&id)
 	return err
 }
+
+func GetPostLikesByUser(db *sql.DB, nickname string) ([]Like, error) {
+	var result []Like
+
+	statement := "SELECT id, post_id, like FROM post_likes WHERE nickname = $1"
+	rows, err := db.Query(statement, nickname)
+	if err != nil {
+		return nil, fmt.Errorf("GetPostLikesByUser: %w", err)
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var like Like
+
+		err := rows.Scan(&like.Id, &like.Elem_Id, &like.Value)
+		if err != nil {
+			return nil, fmt.Errorf("GetPostLike: %w", err)
+		}
+
+		like.Nickname = nickname
+
+		result = append(result, like)
+	}
+
+	return result, nil
+}
