@@ -13,6 +13,7 @@ type application struct {
 	errorLog *log.Logger
 	infoLog  *log.Logger
 	database *sql.DB
+	notice   notification
 }
 
 func Run(port string) error {

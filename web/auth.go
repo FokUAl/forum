@@ -11,6 +11,11 @@ import (
 	"github.com/gofrs/uuid"
 )
 
+type notification struct {
+	Content string
+	Exist   bool
+}
+
 func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/sign-up" {
 		http.NotFound(w, r)
@@ -27,7 +32,7 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = t.Execute(w, nil)
+		err = t.Execute(w, app.notice)
 		if err != nil {
 			log.Println(err.Error())
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -47,6 +52,16 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 			Email:     r.FormValue("email"),
 			Nickname:  r.FormValue("nickname"),
 			Password:  r.FormValue("password"),
+		}
+
+		content, ok := internal.CheckInput(app.database, user)
+
+		if !ok {
+			app.notice = notification{
+				Content: content,
+				Exist:   true,
+			}
+			http.Redirect(w, r, "/sign-up", http.StatusSeeOther)
 		}
 
 		err = internal.Registration(app.database, user)
