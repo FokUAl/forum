@@ -128,6 +128,13 @@ func GetPostsByUser(db *sql.DB, user_id int) ([]Post, error) {
 			return nil, fmt.Errorf("get posts by user: %w", err)
 		}
 
+		categories, err := GetAllCategoryByPost(db, post.Id)
+		if err != nil {
+			return nil, fmt.Errorf("get all posts: %w", err)
+		}
+
+		post.Categories = categories
+
 		result = append(result, post)
 	}
 

@@ -158,3 +158,17 @@ func GetPostLikesByUser(db *sql.DB, nickname string) ([]Like, error) {
 
 	return result, nil
 }
+
+func DeletePostLikes(db *sql.DB, postlike_id int) error {
+	_, err := db.Exec("DELETE FROM post_likes WHERE id = $1",
+		postlike_id)
+
+	return err
+}
+
+func DeleteCommentLike(db *sql.DB, commentlike_id int) error {
+	_, err := db.Exec("DELETE FROM comment_likes WHERE id = $1",
+		commentlike_id)
+
+	return err
+}

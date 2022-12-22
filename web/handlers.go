@@ -346,7 +346,7 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 	} else if like.Id == 0 && likeValue < 0 {
 		err = database.CreateCommentLike(app.database, user.Nickname, -1, comment_id)
 	} else if likeValue == like.Value {
-		err = database.UpdateCommentLike(app.database, 0, user.Nickname, comment_id)
+		err = database.DeleteCommentLike(app.database, like.Id)
 	} else if likeValue != like.Value {
 		err = database.UpdateCommentLike(app.database, likeValue, user.Nickname, comment_id)
 	}
@@ -434,7 +434,7 @@ func (app *application) likePost(w http.ResponseWriter, r *http.Request) {
 	} else if like.Id == 0 && likeValue < 0 {
 		err = database.CreatePostLike(app.database, user.Nickname, -1, post_id)
 	} else if likeValue == like.Value {
-		err = database.UpdatePostLike(app.database, 0, user.Nickname, post_id)
+		err = database.DeletePostLikes(app.database, like.Id)
 	} else if likeValue != like.Value {
 		err = database.UpdatePostLike(app.database, likeValue, user.Nickname, post_id)
 	}
