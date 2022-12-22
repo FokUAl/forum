@@ -62,6 +62,7 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 				Exist:   true,
 			}
 			http.Redirect(w, r, "/sign-up", http.StatusSeeOther)
+			return
 		}
 
 		err = internal.Registration(app.database, user)

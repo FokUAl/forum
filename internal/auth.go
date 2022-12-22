@@ -52,9 +52,9 @@ func CheckInput(db *sql.DB, user database.User) (string, bool) {
 		return "Email is invalid", false
 	}
 
-	if !CheckPassword(user.Password) {
-		return "Invalid password: At least 1 upper case letter," +
-			"1 lowercase letter, 1 digit, 1 digit and 8 characters long", false
+	existed_user, _ := database.CheckEmail(db, user.Email)
+	if existed_user.Id != 0 {
+		return "A user with this email exists", false
 	}
 
 	_, err := database.GetUser(db, user.Nickname)
@@ -62,9 +62,9 @@ func CheckInput(db *sql.DB, user database.User) (string, bool) {
 		return "A user with this nickname exists", false
 	}
 
-	err = database.CheckEmail(db, user.Email)
-	if err == nil {
-		return "A user with this nickname exists", false
+	if !CheckPassword(user.Password) {
+		return "Invalid password: At least 1 upper case letter," +
+			"1 lowercase letter, 1 digit, 1 digit and 8 characters long", false
 	}
 
 	return "", true

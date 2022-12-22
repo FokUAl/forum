@@ -61,8 +61,9 @@ func IsNicknameExist(db *sql.DB, nick string) (bool, error) {
 	return true, nil
 }
 
-func CheckEmail(db *sql.DB, email string) error {
-	_, err := db.Query("SELECT * FROM users WHERE email = $1", email)
-
-	return err
+func CheckEmail(db *sql.DB, email string) (User, error) {
+	user := User{}
+	err := db.QueryRow("SELECT id, nickname FROM users WHERE email = $1",
+		email).Scan(&user.Id, &user.Nickname)
+	return user, err
 }
