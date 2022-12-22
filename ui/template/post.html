@@ -59,7 +59,7 @@
             {{ if .User.Nickname }}
             <form class="btns" action="/post/like/{{ .Post.Id }}" method="post">
                 <input type="submit" name="postLikeBtn" value="1" class="like_btn"></input>
-                <div class="rating">0</div>
+                <div class="rating">{{ .Post.Like }}</div>
                 <input type="submit" name="postLikeBtn" value="-1" class="dislike_btn"></input>
             </form>
             {{ end }}
