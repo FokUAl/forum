@@ -92,7 +92,7 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		err = t.Execute(w, nil)
+		err = t.Execute(w, app.notice)
 		if err != nil {
 			log.Println(err.Error())
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -110,7 +110,11 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 
 		err = internal.Login(app.database, nick, password)
 		if err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			app.notice = notification{
+				Content: "Nickname or password invalid",
+				Exist:   true,
+			}
+			http.Redirect(w, r, "/sign-in", http.StatusSeeOther)
 			return
 		}
 
