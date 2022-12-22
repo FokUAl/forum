@@ -309,11 +309,13 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	likes, err := database.GetLikeByComment(app.database, comment_id)
-	if err != nil {
-		http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
-		return
-	}
+	// like, err := database.GetLikeByComment(app.database, comment_id)
+	// if err != nil {
+	// 	http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
+
+	like, err := database.GetCommentLikeByUser(app.database, user.Nickname, comment_id)
 
 	err = r.ParseForm()
 	if err != nil {
@@ -327,20 +329,14 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, like := range likes {
-		if like.Nickname == user.Nickname && like.Value != likeValue {
-			database.UpdateCommentLike(app.database, likeValue, user.Nickname, comment_id)
-			http.Redirect(w, r, fmt.Sprintf("/post/%d", comment_id), http.StatusSeeOther)
-		} else if like.Nickname == user.Nickname {
-			database.UpdateCommentLike(app.database, 0, user.Nickname, comment_id)
-			http.Redirect(w, r, fmt.Sprintf("/post/%d", comment_id), http.StatusSeeOther)
-		}
-	}
-
-	if likeValue > 0 {
+	if like.Id == 0 && likeValue > 0 {
 		err = database.CreateCommentLike(app.database, user.Nickname, 1, comment_id)
-	} else if likeValue < 0 {
+	} else if like.Id == 0 && likeValue < 0 {
 		err = database.CreateCommentLike(app.database, user.Nickname, -1, comment_id)
+	} else if likeValue == like.Value {
+		err = database.UpdateCommentLike(app.database, 0, user.Nickname, comment_id)
+	} else if likeValue != like.Value {
+		err = database.UpdateCommentLike(app.database, likeValue, user.Nickname, comment_id)
 	}
 
 	if err != nil {
