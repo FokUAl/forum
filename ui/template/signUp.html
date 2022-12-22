@@ -24,21 +24,27 @@
                     <li onclick="location.href='/sign-up'" class="sign_link">Sign up</li>
                 </ul>
             </div>
-            
         </header>
         <form action="/sign-up" method="post" class="sign_up">
             <div class="title">Sign Up</div>
-            <input id="FirstName" class="textarea_signup" name="firstName" type="text" placeholder="Enter your name">
-            <input id="LastName" class="textarea_signup" name="lastName" type="text" placeholder="Enter your last name">
-            <input id="Email" class="textarea_signup" name="email" type="text" placeholder="Enter your email">
-            <input id="Nickname" class="textarea_signup" name="nickname" type="text" placeholder="Enter you nickname">
-            <input id="Password" class="textarea_signup" name="password" type="password" placeholder="Enter your password">
-            
+            <div class="inputs_up">
+                <input id="FirstName" class="fn_input" name="firstName" type="text" placeholder="Enter your name">
+                <input id="LastName" class="ln_input" name="lastName" type="text" placeholder="Enter your last name">
+                <input id="Email" class="e_input" name="email" type="text" placeholder="*Enter your email" required>
+                <input id="Nickname" class="n_input" name="nickname" type="text" placeholder="*Enter you nickname" required>
+                <input id="Password" class="p_input" name="password" type="password" placeholder="*Enter your password" required>
+            </div>
             <input class="signup_btn" type="submit" value="Sign Up">
         </form>
         <footer>
             <div class="authors">Development by @HgCl2 & @aleebeg</div>
             <div class="year">2022</div>
         </footer>
+
+        {{ if .Exist }}
+        <script>
+                alert('{{ .Content }}')
+        </script>
+        {{ end }}
     </body>
 </html>

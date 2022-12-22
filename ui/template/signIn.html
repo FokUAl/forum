@@ -26,15 +26,23 @@
             </div>
             
         </header>
-        <form action="/sign-in" method="post" class="sign_up">
+        <form action="/sign-in" method="post" class="sign_in">
             <div class="title">Sign In</div>
-            <input class="textarea_signup" name="nickname" placeholder="Enter your nickname" type="text"></input>
-            <input class="textarea_signup" name="password" placeholder="Enter your password" type="password"></input>
-            <input class="signup_btn" type="submit" value="Sign In">
+            <div class="inputs_in">
+                <input class="textarea_signup" name="nickname" placeholder="Enter your nickname" type="text"></input>
+                <input class="textarea_signup" name="password" placeholder="Enter your password" type="password"></input>
+            </div>
+            <input class="signin_btn" type="submit" value="Sign In">
         </form>
         <footer>
             <div class="authors">Development by @HgCl2 & @aleebeg</div>
             <div class="year">2022</div>
         </footer>
+
+        {{ if .Exist }}
+        <script>
+                alert('{{ .Content }}')
+        </script>
+        {{ end }}
     </body>
 </html>
