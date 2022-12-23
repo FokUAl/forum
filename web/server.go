@@ -38,6 +38,17 @@ func Run(port string) error {
 		database: dbHandler,
 	}
 
+	Route(app, mux, fileServer)
+
+	infoLog.Printf("Launch server on %s", port)
+
+	err := srv.ListenAndServe()
+	errorLog.Fatal(err)
+
+	return err
+}
+
+func Route(app *application, mux *http.ServeMux, fileServer http.Handler) {
 	mux.HandleFunc("/", app.home)
 	mux.HandleFunc("/post/", app.post)
 	mux.HandleFunc("/sign-up", app.signUp)
@@ -50,11 +61,4 @@ func Run(port string) error {
 
 	mux.Handle("/static", http.NotFoundHandler())
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
-
-	infoLog.Printf("Launch server on %s", port)
-
-	err := srv.ListenAndServe()
-	errorLog.Fatal(err)
-
-	return err
 }
