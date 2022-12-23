@@ -149,10 +149,10 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 
 	like, err := database.GetCommentLikeByUser(app.database, user.Nickname, comment_id)
 	if err != nil {
-		app.errorLog.Printf("likeComment: %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusInternalServerError),
-			http.StatusInternalServerError)
-		return
+		app.infoLog.Printf("likeComment: %s\n", err.Error())
+		// http.Error(w, http.StatusText(http.StatusInternalServerError),
+		// 	http.StatusInternalServerError)
+		// return
 	}
 
 	err = r.ParseForm()
