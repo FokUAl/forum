@@ -35,9 +35,18 @@
                     {{ end }}
                 </ul>
             </div>
-            
         </header>
+
+        <form action="/" method="post" class="filter">
+            <div class="filter_title">Search for category</div>
+            <div class="inputs">
+                <input type="text" name="catFilter" class="filter_text">
+                <input type="submit" class="filter_submit" value="Search">
+            </div>
+        </form>
+
         <div class="line">
+            {{ if .Posts }}
             {{ range .Posts }}
             <div class="post">
                 <div class="title_author">
@@ -51,6 +60,9 @@
                     {{ end }}
                 </div>
             </div>
+            {{ end }}
+            {{ else }}
+            <div class="post">No posts yet</div>
             {{ end }}
         </div>
         <footer>
