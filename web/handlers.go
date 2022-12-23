@@ -18,13 +18,6 @@ type info struct {
 }
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	// if r.Method != http.MethodGet {
-	// 	app.errorLog.Printf("home: Method not allowed\n")
-	// 	http.Error(w, http.StatusText(http.StatusMethodNotAllowed),
-	// 		http.StatusMethodNotAllowed)
-	// 	return
-	// }
-
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return
@@ -45,6 +38,22 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, http.StatusText(http.StatusInternalServerError),
 			http.StatusInternalServerError)
 		return
+	}
+
+	catFilter := r.FormValue("catFilter")
+	if catFilter != "" {
+		if r.Method != http.MethodPost {
+			app.errorLog.Printf("likeComment: method not allowed\n")
+			http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+			return
+		}
+		posts, err = database.GetPostByCategory(app.database, catFilter)
+		if err != nil {
+			app.errorLog.Printf("home: %s\n", err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError),
+				http.StatusInternalServerError)
+			return
+		}
 	}
 
 	new_info := info{

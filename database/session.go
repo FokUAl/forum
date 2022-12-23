@@ -41,6 +41,7 @@ func CreateSession(db *sql.DB, nick string, token string, expiry time.Time) erro
 	}
 
 	defer stmt.Close()
-	err = stmt.QueryRow(nick, token, expiry).Scan()
+	id := 0
+	err = stmt.QueryRow(nick, token, expiry).Scan(&id)
 	return err
 }

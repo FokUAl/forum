@@ -90,7 +90,7 @@ func GetAllPost(db *sql.DB) ([]Post, error) {
 func GetPostByCategory(db *sql.DB, category string) ([]Post, error) {
 	var result []Post
 
-	statement := "SELECT * FROM posts WHERE id IN (SELECT post_id FROM categories WHERE name = $1)"
+	statement := "SELECT id, title, message, author FROM posts WHERE id IN (SELECT post_id FROM categories WHERE name = $1)"
 	rows, err := db.Query(statement, category)
 	if err != nil {
 		return nil, fmt.Errorf("get post by category: %w", err)
@@ -101,8 +101,15 @@ func GetPostByCategory(db *sql.DB, category string) ([]Post, error) {
 		err = rows.Scan(&post.Id, &post.Title, &post.Message,
 			&post.Author)
 		if err != nil {
-			return nil, fmt.Errorf("get postsby category: %w", err)
+			return nil, fmt.Errorf("get posts by category: %w", err)
 		}
+
+		categories, err := GetAllCategoryByPost(db, post.Id)
+		if err != nil {
+			return nil, fmt.Errorf("get posts by category: %w", err)
+		}
+
+		post.Categories = categories
 
 		result = append(result, post)
 	}
@@ -130,7 +137,7 @@ func GetPostsByUser(db *sql.DB, user_id int) ([]Post, error) {
 
 		categories, err := GetAllCategoryByPost(db, post.Id)
 		if err != nil {
-			return nil, fmt.Errorf("get all posts: %w", err)
+			return nil, fmt.Errorf("get posts by user: %w", err)
 		}
 
 		post.Categories = categories
