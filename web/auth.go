@@ -140,7 +140,7 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 
 		expiresAt := time.Now().Add(12 * time.Hour)
 
-		err = database.CreateSession(app.database, nick, sessionToken.String(), expiresAt)
+		err = internal.CreateSession(app.database, nick, sessionToken.String(), expiresAt)
 		if err != nil {
 			app.errorLog.Printf("signIn: %s\n", err.Error())
 			http.Error(w, http.StatusText(http.StatusInternalServerError),
@@ -153,6 +153,8 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 			Value:   sessionToken.String(),
 			Expires: expiresAt,
 		})
+
+		app.notice.Exist = false
 
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	}

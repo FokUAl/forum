@@ -45,3 +45,19 @@ func CreateSession(db *sql.DB, nick string, token string, expiry time.Time) erro
 	err = stmt.QueryRow(nick, token, expiry).Scan(&id)
 	return err
 }
+
+func UpdateSession(db *sql.DB, nick string, new_token string, expiry time.Time) error {
+	_, err := db.Exec("UPDATE sessions SET session_token = $1 WHERE nickname = $2", new_token, nick)
+
+	return err
+}
+
+func IsSessionExist(db *sql.DB, nick string) (bool, error) {
+	id := 0
+	err := db.QueryRow("SELECT id FROM sessions WHERE nickname = $1", nick).Scan(&id)
+	if err != nil {
+		return false, err
+	}
+
+	return id != 0, nil
+}

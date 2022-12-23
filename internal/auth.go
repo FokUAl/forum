@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"forumAA/database"
 	"net/mail"
+	"time"
 	"unicode"
 )
 
@@ -68,4 +69,15 @@ func CheckInput(db *sql.DB, user database.User) (string, bool) {
 	}
 
 	return "", true
+}
+
+func CreateSession(db *sql.DB, nick string, token string, expiry time.Time) (err error) {
+	sessionExistence, _ := database.IsSessionExist(db, nick)
+	if !sessionExistence {
+		err = database.CreateSession(db, nick, token, expiry)
+	} else {
+		err = database.UpdateSession(db, nick, token, expiry)
+	}
+
+	return
 }
