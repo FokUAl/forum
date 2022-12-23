@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"forumAA/database"
 	"html/template"
-	"log"
 	"net/http"
 	"strconv"
 	"strings"
@@ -19,11 +18,12 @@ type info struct {
 }
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
+	// if r.Method != http.MethodGet {
+	// 	app.errorLog.Printf("home: Method not allowed\n")
+	// 	http.Error(w, http.StatusText(http.StatusMethodNotAllowed),
+	// 		http.StatusMethodNotAllowed)
+	// 	return
+	// }
 
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
@@ -32,15 +32,18 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
 	t, err := template.ParseFiles("./ui/template/home.html")
 	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, "File not found: home.html", 500)
+		app.errorLog.Printf("home: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
 		return
 	}
 
 	user := app.checkUser(w, r)
 	posts, err := database.GetAllPost(app.database)
 	if err != nil {
-		http.Error(w, "home: get all post: "+err.Error(), http.StatusInternalServerError)
+		app.errorLog.Printf("home: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
 		return
 	}
 
@@ -48,42 +51,54 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		User:  user,
 		Posts: posts,
 	}
-	err = t.Execute(w, new_info)
 
+	err = t.Execute(w, new_info)
 	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		app.errorLog.Printf("home: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
+		return
 	}
 }
 
 func (app *application) profile(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		app.errorLog.Printf("profile: Method not allowed\n")
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed),
+			http.StatusMethodNotAllowed)
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
 
 	user := app.checkUser(w, r)
 	if user.Id == 0 {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
+		app.errorLog.Printf("profile: unauthorized user\n")
+		http.Error(w, http.StatusText(http.StatusUnauthorized),
+			http.StatusUnauthorized)
+		return
 	}
 
 	t, err := template.ParseFiles("./ui/template/profile.html")
 	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, "File not found: profile.html", 500)
+		app.errorLog.Printf("profile: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
 		return
 	}
 
 	createdPosts, err := database.GetPostsByUser(app.database, user.Id)
 	if err != nil {
-		http.Error(w, "profile: "+err.Error(), http.StatusInternalServerError)
+		app.errorLog.Printf("profile: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
 		return
 	}
 
 	likedPost, err := database.GetPostsLikedByUser(app.database, user.Nickname)
 	if err != nil {
-		http.Error(w, "profile: "+err.Error(), http.StatusInternalServerError)
+		app.errorLog.Printf("profile: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
 		return
 	}
 
@@ -94,41 +109,56 @@ func (app *application) profile(w http.ResponseWriter, r *http.Request) {
 	}
 	err = t.Execute(w, new_info)
 	if err != nil {
-		log.Println(err.Error())
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		app.errorLog.Printf("profile: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
 	}
 }
 
 func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 	user := app.checkUser(w, r)
 	if user.Id == 0 {
-		http.Error(w, "likeComment: unauthorized user", http.StatusUnauthorized)
+		app.errorLog.Printf("likeComment: unauthorized user\n")
+		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
 
 	comment_id_str := strings.TrimPrefix(r.URL.Path, "/comment/like/")
 	comment_id, err := strconv.Atoi(comment_id_str)
 	if err != nil {
-		http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
+		app.errorLog.Printf("likeComment: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
 		return
 	}
 
 	if r.Method != http.MethodPost {
-		http.Error(w, "likeComment: method not allowed", http.StatusMethodNotAllowed)
+		app.errorLog.Printf("likeComment: method not allowed\n")
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
 		return
 	}
 
 	like, err := database.GetCommentLikeByUser(app.database, user.Nickname, comment_id)
+	if err != nil {
+		app.errorLog.Printf("likeComment: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
+		return
+	}
 
 	err = r.ParseForm()
 	if err != nil {
-		http.Error(w, "StatusBadRequest", http.StatusBadRequest)
+		app.errorLog.Printf("likeComment: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest),
+			http.StatusBadRequest)
 		return
 	}
 
 	likeValue, err := strconv.Atoi(r.FormValue("commentLikeBtn"))
 	if err != nil {
-		http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
+		app.errorLog.Printf("likeComment: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
 		return
 	}
 
@@ -143,7 +173,9 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err != nil {
-		http.Error(w, "likeComment: "+err.Error(), http.StatusInternalServerError)
+		app.errorLog.Printf("likeComment: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
 		return
 	}
 
