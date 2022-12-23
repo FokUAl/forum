@@ -73,6 +73,8 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 				http.StatusInternalServerError)
 		}
 
+		app.notice.Exist = false
+
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	default:
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed),
@@ -123,7 +125,7 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 				Content: "Nickname or password invalid",
 				Exist:   true,
 			}
-			app.errorLog.Printf("signIn: %s\n", err.Error())
+			app.infoLog.Printf("signIn: %s\n", err.Error())
 			http.Redirect(w, r, "/sign-in", http.StatusSeeOther)
 			return
 		}
