@@ -11,7 +11,7 @@ func Init() *sql.DB {
 	var err error
 	db, err := sql.Open("sqlite3", "file:forum.db")
 	if err != nil {
-		panic("failed to connect database")
+		log.Fatal("failed to connect database")
 	}
 
 	statement, err := db.Prepare("PRAGMA foreign_keys = 1")
@@ -72,7 +72,7 @@ func Init() *sql.DB {
 	statement.Exec()
 
 	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS post_likes " +
-		"(id INTEGER PRIMARY KEY, nickname TEXT UNIQUE, like INTEGER DEFAULT 0, post_id INTEGER, " +
+		"(id INTEGER PRIMARY KEY, nickname TEXT, like INTEGER DEFAULT 0, post_id INTEGER, " +
 		"FOREIGN KEY (post_id) REFERENCES posts(id) " +
 		"ON DELETE CASCADE)")
 	if err != nil {
