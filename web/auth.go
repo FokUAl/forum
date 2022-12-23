@@ -4,7 +4,6 @@ import (
 	"forumAA/database"
 	"forumAA/internal"
 	"html/template"
-	"log"
 	"net/http"
 	"time"
 
@@ -18,8 +17,8 @@ type notification struct {
 
 func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/sign-up" {
+		app.errorLog.Printf("signUp: invalid path: %s\n", r.URL.Path)
 		http.NotFound(w, r)
-		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
@@ -27,14 +26,15 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		t, err := template.ParseFiles("./ui/template/signUp.html")
 		if err != nil {
-			log.Println(err.Error())
-			http.Error(w, "File not found: signUp.html", 500)
+			app.errorLog.Printf("signUp: %s\n", err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError),
+				http.StatusInternalServerError)
 			return
 		}
 
 		err = t.Execute(w, app.notice)
 		if err != nil {
-			log.Println(err.Error())
+			app.errorLog.Printf("signUp: %s\n", err.Error())
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
@@ -42,7 +42,8 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		err := r.ParseForm()
 		if err != nil {
-			http.Error(w, "StatusBadRequest", http.StatusBadRequest)
+			app.errorLog.Printf("signUp: %s\n", err.Error())
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return
 		}
 
@@ -67,19 +68,23 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 
 		err = internal.Registration(app.database, user)
 		if err != nil {
-			log.Println(err.Error())
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			app.errorLog.Printf("signUp: %s\n", err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError),
+				http.StatusInternalServerError)
 		}
+
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 	default:
-		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
+		http.Error(w, http.StatusText(http.StatusMethodNotAllowed),
+			http.StatusMethodNotAllowed)
+		return
 	}
 }
 
 func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/sign-in" {
+		app.errorLog.Printf("signIn: invalid path %s", r.URL.Path)
 		http.NotFound(w, r)
-		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
@@ -87,21 +92,25 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		t, err := template.ParseFiles("./ui/template/signIn.html")
 		if err != nil {
-			log.Println(err.Error())
-			http.Error(w, "File not found: signin.html", 500)
+			app.errorLog.Printf("signIn: %s\n", err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError),
+				http.StatusInternalServerError)
 			return
 		}
 
 		err = t.Execute(w, app.notice)
 		if err != nil {
-			log.Println(err.Error())
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			app.errorLog.Printf("signIn: %s\n", err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError),
+				http.StatusInternalServerError)
 		}
 
 	case http.MethodPost:
 		err := r.ParseForm()
 		if err != nil {
-			http.Error(w, "StatusBadRequest", http.StatusBadRequest)
+			app.errorLog.Printf("signIn: %s\n", err.Error())
+			http.Error(w, http.StatusText(http.StatusBadRequest),
+				http.StatusBadRequest)
 			return
 		}
 
@@ -114,18 +123,28 @@ func (app *application) signIn(w http.ResponseWriter, r *http.Request) {
 				Content: "Nickname or password invalid",
 				Exist:   true,
 			}
+			app.errorLog.Printf("signIn: %s\n", err.Error())
 			http.Redirect(w, r, "/sign-in", http.StatusSeeOther)
 			return
 		}
 
 		sessionToken, err := uuid.NewV4()
 		if err != nil {
-			log.Fatalf("failed to generate UUID: %v", err)
+			app.errorLog.Printf("signIn: %s\n", err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError),
+				http.StatusInternalServerError)
+			return
 		}
 
 		expiresAt := time.Now().Add(12 * time.Hour)
 
-		database.CreateSession(app.database, nick, sessionToken.String(), expiresAt)
+		err = database.CreateSession(app.database, nick, sessionToken.String(), expiresAt)
+		if err != nil {
+			app.errorLog.Printf("signIn: %s\n", err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError),
+				http.StatusInternalServerError)
+			return
+		}
 
 		http.SetCookie(w, &http.Cookie{
 			Name:    "session_token",
@@ -142,15 +161,24 @@ func (app *application) logOut(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if err == http.ErrNoCookie {
 			w.WriteHeader(http.StatusUnauthorized)
+			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+			app.errorLog.Printf("logOut: unauthorized user\n")
 			return
 		}
-		// For any other type of error, return a bad request status
-		w.WriteHeader(http.StatusBadRequest)
+
+		app.errorLog.Printf("logOut: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 		return
 
 	}
+
 	sessionToken := c.Value
-	database.DeleteSession(app.database, sessionToken)
+	err = database.DeleteSession(app.database, sessionToken)
+	if err != nil {
+		app.errorLog.Printf("logOut: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
+		return
+	}
 
 	http.SetCookie(w, &http.Cookie{
 		Name:    "session_token",
