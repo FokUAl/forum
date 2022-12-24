@@ -39,6 +39,8 @@ func (app *application) signUp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		app.notice.Exist = false
+
 	case http.MethodPost:
 		err := r.ParseForm()
 		if err != nil {

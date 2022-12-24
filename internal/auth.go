@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"forumAA/database"
 	"net/mail"
+	"strings"
 	"time"
 	"unicode"
 )
@@ -56,6 +57,17 @@ func CheckInput(db *sql.DB, user database.User) (string, bool) {
 	existed_user, _ := database.CheckEmail(db, user.Email)
 	if existed_user.Id != 0 {
 		return "A user with this email exists", false
+	}
+
+	name := strings.Trim(user.Nickname, " ")
+	firstname := strings.Trim(user.Firstname, " ")
+	lastname := strings.Trim(user.Lastname, " ")
+	if name == "" {
+		return "Username is empty.", false
+	} else if firstname == "" {
+		return "Firstname is empty", false
+	} else if lastname == "" {
+		return "Lastname is empty", false
 	}
 
 	_, err := database.GetUser(db, user.Nickname)
