@@ -209,6 +209,7 @@ body {
     border: 2px solid #333652;
     border-left: none;
     border-right: none;
+    font-size: 18px;
 }
 
 .create_area input:focus {
@@ -249,6 +250,7 @@ body {
     width: 100px;
     margin-left: 5px;
     border:#333652 2px solid;
+    font-size: 18px;
 }
 
 .msg_textarea {
@@ -258,6 +260,7 @@ body {
     border: 2px solid #333652;
     border-left: none;
     border-right: none;
+    font-size: 18px;
 }
 
 .msg_textarea:focus {
