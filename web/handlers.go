@@ -1,6 +1,8 @@
 package web
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"forumAA/database"
 	"html/template"
@@ -148,11 +150,11 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	like, err := database.GetCommentLikeByUser(app.database, user.Nickname, comment_id)
-	if err != nil {
-		app.infoLog.Printf("likeComment: %s\n", err.Error())
-		// http.Error(w, http.StatusText(http.StatusInternalServerError),
-		// 	http.StatusInternalServerError)
-		// return
+	if !errors.Is(err, sql.ErrNoRows) {
+		app.errorLog.Printf("likeComment: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
+		return
 	}
 
 	comment, err := database.GetComment(app.database, comment_id)

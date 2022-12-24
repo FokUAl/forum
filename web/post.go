@@ -1,6 +1,8 @@
 package web
 
 import (
+	"database/sql"
+	"errors"
 	"fmt"
 	"forumAA/database"
 	"forumAA/internal"
@@ -24,6 +26,10 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 	post, err := database.GetPost(app.database, int(post_id))
 	if err != nil {
 		app.errorLog.Printf("post: %s\n", err.Error())
+		if errors.Is(err, sql.ErrNoRows) {
+			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+			return
+		}
 		http.Error(w, http.StatusText(http.StatusInternalServerError),
 			http.StatusInternalServerError)
 		return
@@ -175,11 +181,11 @@ func (app *application) likePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	like, err := database.GetPostLikeByUser(app.database, user.Nickname, post_id)
-	if err != nil {
-		app.infoLog.Printf("likePost: %s\n", err.Error())
-		// http.Error(w, http.StatusText(http.StatusInternalServerError),
-		// 	http.StatusInternalServerError)
-		// return
+	if !errors.Is(err, sql.ErrNoRows) {
+		app.errorLog.Printf("likePost: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
+		return
 	}
 
 	err = r.ParseForm()

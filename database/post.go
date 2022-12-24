@@ -34,6 +34,9 @@ func GetPost(db *sql.DB, id int) (post Post, err error) {
 	err = db.QueryRow("SELECT id, title, message, author FROM posts WHERE id = $1",
 		id).Scan(&post.Id, &post.Title, &post.Message, &post.Author)
 
+	if err != nil {
+		return post, err
+	}
 	categories, err := GetAllCategoryByPost(db, id)
 	if err != nil {
 		return Post{}, fmt.Errorf("get all posts: %w", err)
