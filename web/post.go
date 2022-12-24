@@ -91,7 +91,7 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 		comment := database.Comment{
 			Content: comment_content,
 			Author:  user.Nickname,
-			Post:    &post,
+			Post_Id: post.Id,
 		}
 
 		err = comment.Create(app.database)

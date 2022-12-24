@@ -75,7 +75,7 @@ func GetCommentLikeByUser(db *sql.DB, nickname string, comment_id int) (Like, er
 		"WHERE nickname = $1 AND comment_id = $2", nickname,
 		comment_id).Scan(&result.Id, &result.Value)
 	if err != nil {
-		return result, fmt.Errorf("GetPostLikeByUser: %w", err)
+		return result, fmt.Errorf("GetCommentLikeByUser: %w", err)
 	}
 
 	result.Nickname = nickname

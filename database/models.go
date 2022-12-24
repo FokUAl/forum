@@ -25,7 +25,7 @@ type Comment struct {
 	Content string
 	Author  string
 	Like    int
-	Post    *Post
+	Post_Id int
 }
 
 type Category struct {

@@ -155,6 +155,14 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 		// return
 	}
 
+	comment, err := database.GetComment(app.database, comment_id)
+	if err != nil {
+		app.errorLog.Printf("likeComment: %s\n", err.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError),
+			http.StatusInternalServerError)
+		return
+	}
+
 	err = r.ParseForm()
 	if err != nil {
 		app.errorLog.Printf("likeComment: %s\n", err.Error())
@@ -188,5 +196,5 @@ func (app *application) likeComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, fmt.Sprintf("/post/%d", comment_id), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/post/%d", comment.Post_Id), http.StatusSeeOther)
 }

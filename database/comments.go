@@ -7,13 +7,13 @@ import (
 )
 
 func (comment *Comment) Create(db *sql.DB) (err error) {
-	if comment.Post == nil {
+	if comment.Post_Id == 0 {
 		err = errors.New("Post not found")
 		return
 	}
 	statement := "INSERT INTO comments (content, author, post_id)" +
 		"values ($1, $2, $3) returning id"
-	err = db.QueryRow(statement, comment.Content, comment.Author, comment.Post.Id).Scan(&comment.Id)
+	err = db.QueryRow(statement, comment.Content, comment.Author, comment.Post_Id).Scan(&comment.Id)
 	return
 }
 
@@ -23,8 +23,8 @@ func (comment *Comment) Delete(db *sql.DB) (err error) {
 }
 
 func GetComment(db *sql.DB, id int) (comment Comment, err error) {
-	err = db.QueryRow("SELECT content, author, FROM comments WHERE id = $1",
-		id).Scan(&comment.Content, comment.Author)
+	err = db.QueryRow("SELECT content, author, post_id FROM comments WHERE id = $1",
+		id).Scan(&comment.Content, &comment.Author, &comment.Post_Id)
 	return
 }
 
@@ -38,7 +38,7 @@ func (comment *Comment) Update(db *sql.DB, newComment string) (err error) {
 func GetAllCommentsByPost(db *sql.DB, post_id int) ([]Comment, error) {
 	var result []Comment
 
-	statement := "SELECT * FROM comments WHERE post_id = $1"
+	statement := "SELECT id, content, author FROM comments WHERE post_id = $1"
 
 	rows, err := db.Query(statement, post_id)
 	if err != nil {
@@ -48,18 +48,12 @@ func GetAllCommentsByPost(db *sql.DB, post_id int) ([]Comment, error) {
 	for rows.Next() {
 		var comment Comment
 
-		post, err := GetPost(db, post_id)
+		err = rows.Scan(&comment.Id, &comment.Content, &comment.Author)
 		if err != nil {
 			return nil, fmt.Errorf("get comments by post: %w", err)
 		}
 
-		var _id int
-		err = rows.Scan(&comment.Id, &comment.Content, &comment.Author, &_id)
-		if err != nil {
-			return nil, fmt.Errorf("get comments by post: %w", err)
-		}
-
-		comment.Post = &post
+		comment.Post_Id = post_id
 		result = append(result, comment)
 	}
 
