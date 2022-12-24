@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"forumAA/database"
 	"net/http"
+	"strings"
 )
 
 func CreatePost(db *sql.DB, user database.User, r *http.Request) error {
@@ -16,6 +17,20 @@ func CreatePost(db *sql.DB, user database.User, r *http.Request) error {
 	title := r.FormValue("postTitle")
 	message := r.FormValue("postMessage")
 	categories := r.Form["postCat"]
+
+	title = strings.Trim(title, " ")
+	message = strings.Trim(message, " ")
+
+	if title == "" || message == "" {
+		return fmt.Errorf("Title or message is empty")
+	}
+
+	for i := 0; i < len(categories); i++ {
+		categories[i] = strings.Trim(categories[i], " ")
+		if categories[i] == "" {
+			return fmt.Errorf("Category is empty")
+		}
+	}
 
 	post := database.Post{
 		Title:      title,
