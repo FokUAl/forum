@@ -94,6 +94,14 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 		}
 
 		comment_content := r.FormValue("comment")
+		comment_content = strings.Trim(comment_content, " ")
+		if comment_content == "" {
+			app.errorLog.Printf("post: Comment content is empty\n")
+			http.Error(w, http.StatusText(http.StatusBadRequest),
+				http.StatusBadRequest)
+			return
+		}
+
 		comment := database.Comment{
 			Content: comment_content,
 			Author:  user.Nickname,
