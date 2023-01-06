@@ -77,7 +77,7 @@ func CheckInput(db *sql.DB, user database.User) (string, bool) {
 
 	if !CheckPassword(user.Password) {
 		return "Invalid password: At least 1 upper case letter," +
-			"1 lowercase letter, 1 digit, 1 digit and 8 characters long", false
+			"1 lowercase letter, 1 digit and 8 characters long", false
 	}
 
 	return "", true
