@@ -74,6 +74,5 @@ HgCl2 and aleebeg and Alfarabi09
 **Usage**
 ------
 For build and run use Makefile.
-**make build** for building docker image. 
-**make run** for running docker container.
+**make build** for building docker image.  **make run** for running docker container. In this case url is localhost:4888.
 Or you can use command **go run ./cmd [:port number]**. Example: "go run ./cmd :8080". Default port is 4888.
