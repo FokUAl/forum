@@ -72,7 +72,7 @@
             {{ if .User.Nickname }}
             <form action="/post/{{ .Post.Id }}" method="post" class="comment_area">
                 Your comment
-                <input name ="comment" class="textarea_comment" rows="4" cols="50"></input>
+                <textarea name ="comment" class="textarea_comment" rows="3" cols="50"></textarea>
                 <input class="submit_comment" type="submit" value="Submit">
             </form>
             {{ end }}
@@ -105,7 +105,7 @@
             {{ end }}
         </div>
         <footer>
-            <div class="authors">Development by @HgCl2 & @aleebeg</div>
+            <div class="authors">Development by @HgCl2 & @aleebeg & @Alfarabi09</div>
             <div class="year">2022</div>
         </footer>
 

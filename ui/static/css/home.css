@@ -35,6 +35,7 @@ body {
     margin: 0 auto;
 
     color: #333652;
+    word-wrap: break-word
 }
 
 .bg {
@@ -118,12 +119,6 @@ body {
     background-color: #E9EAEC;
 }
 
-.profile_drop:hover {
-    cursor: pointer;
-    color: #333652;
-    background-color: #E9EAEC;
-}
-
 .dropbtn {
     display: inline-block;
     text-align: center;
@@ -131,6 +126,12 @@ body {
     text-decoration: none;
     color: #E9EAEC;
     position: relative;
+}
+
+.profile_drop:hover {
+    cursor: pointer;
+    color: #333652;
+    background-color: #E9EAEC;
 }
 
 .dropdown_content {
@@ -141,18 +142,16 @@ body {
 }
 
 .dropdown_content a {
-    color: #333652;
+    color: #E9EAEC;
+    background-color: #333652;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-    border-bottom:#333652 2px solid; 
-    border-left:#333652 2px solid;
-    border-right:#333652 2px solid;
 }
 
 .dropdown_content a:hover {
-    background-color: #333652;
-    color: #E9EAEC;
+    background-color: #E9EAEC;
+    color: #333652;
 }
 
 .profile_drop:hover .dropdown_content {
@@ -161,7 +160,6 @@ body {
 
 .profile_drop:hover .dropbtn {
     color:#333652;
-    border:#333652 2px solid;
 }
 
 .sign_link {
@@ -255,11 +253,8 @@ body {
 
 /* FOOTER */
 
+
 footer {
-    position: fixed;
-    left: 0;
     bottom: 0;
-    width: 100%;
     text-align: center;
-    margin-bottom: 15px;
 }

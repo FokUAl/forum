@@ -36,6 +36,7 @@ body {
     margin: 0 auto;
 
     color: #333652;
+    word-wrap: break-word
 }
 
 .bg {
@@ -214,10 +215,6 @@ body {
 /* FOOTER */
 
 footer {
-    position: fixed;
-    left: 0;
     bottom: 0;
-    width: 100%;
     text-align: center;
-    margin-bottom: 15px;
 }

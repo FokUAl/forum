@@ -51,16 +51,19 @@
         </form>
 
         <footer>
-            <div class="authors">Development by @HgCl2 & @aleebeg</div>
+            <div class="authors">Development by @HgCl2 & @aleebeg & @Alfarabi09</div>
             <div class="year">2022</div>
         </footer>
 
         <script>
             const addCat = () => {
-                const cat = document.getElementById('cat')
-                const clone = cat.cloneNode(true)
-                clone.value = ''
-                document.getElementById('cat_container').appendChild(clone)
+                const cats = document.getElementById('cat_container')
+                if (cats.children.length < 9) {
+                    const cat = document.getElementById('cat')
+                    const clone = cat.cloneNode(true)
+                    clone.value = ''
+                    document.getElementById('cat_container').appendChild(clone)
+                }
             }
             const removeCat = () => {
                 const cats = document.getElementById('cat_container')
