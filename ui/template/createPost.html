@@ -91,18 +91,17 @@
                     else
                         classArr.push(cats[i].value);
                 }
-            });
-
-            const validation = () => {
+                
                 const coms = document.forms[0]
-                for (let i in coms) {
+                for (let i = 0; i < coms.length; i++) {
                     const com = coms.elements[i].value
                     if (com.trim() === '' || com.trim === null) {
                         alert('Fill all fields')
                         return false
                     }
                 }
-            }
+                form.submit();
+            });
         </script>
     </body>
 </html>
