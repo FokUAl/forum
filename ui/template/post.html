@@ -70,7 +70,7 @@
             </div>
             {{ end }}
             {{ if .User.Nickname }}
-            <form action="/post/{{ .Post.Id }}" method="post" class="comment_area">
+            <form action="/post/{{ .Post.Id }}" method="post" class="comment_area" onsubmit="return validation()">
                 Your comment
                 <textarea name ="comment" class="textarea_comment" rows="3" cols="50"></textarea>
                 <input class="submit_comment" type="submit" value="Submit">
@@ -112,6 +112,14 @@
         <script>
             const notAllowed = () => {
                 alert('Sign in first!')
+            }
+
+            const validation = () => {
+                let com = document.forms[1].elements[0].value
+                if (com.trim() === '' || com.trim === null) {
+                    alert('Fill comment')
+                    return false
+                }
             }
         </script>
     </body>

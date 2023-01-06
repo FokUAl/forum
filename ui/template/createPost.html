@@ -32,7 +32,7 @@
             
         </header>
         
-        <form action="/create-post" method="post" class="create_area" id="post">
+        <form action="/create-post" method="post" class="create_area" id="post" onsubmit="return validation()">
             <label class="title_label">Creating new post</label>
             <label class="name_label">Title</label>
             <input type="text" name="postTitle" class="name_textarea" required></input>
@@ -91,8 +91,18 @@
                     else
                         classArr.push(cats[i].value);
                 }
-                form.submit();
             });
+
+            const validation = () => {
+                const coms = document.forms[0]
+                for (let i in coms) {
+                    const com = coms.elements[i].value
+                    if (com.trim() === '' || com.trim === null) {
+                        alert('Fill all fields')
+                        return false
+                    }
+                }
+            }
         </script>
     </body>
 </html>
