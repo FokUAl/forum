@@ -152,7 +152,13 @@ func (app *application) createPost(w http.ResponseWriter, r *http.Request) {
 		}
 	case http.MethodPost:
 		err := internal.CreatePost(app.database, user, r)
-		if err != nil {
+		if err != nil && (err.Error() == "Title or message is empty" ||
+			err.Error() == "Category is empty") {
+			app.errorLog.Printf("createPost: %s\n", err.Error())
+			http.Error(w, http.StatusText(http.StatusBadRequest),
+				http.StatusBadRequest)
+			return
+		} else if err != nil {
 			app.errorLog.Printf("createPost: %s\n", err.Error())
 			http.Error(w, http.StatusText(http.StatusInternalServerError),
 				http.StatusInternalServerError)
