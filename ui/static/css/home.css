@@ -230,6 +230,7 @@ body {
 }
 
 .title {
+    max-width: 80%;
     font-size: 23px;
 }
 
