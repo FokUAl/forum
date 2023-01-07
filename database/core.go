@@ -11,7 +11,7 @@ func Init() *sql.DB {
 	var err error
 	db, err := sql.Open("sqlite3", "file:forum.db")
 	if err != nil {
-		log.Fatal("failed to connect database")
+		log.Fatal("Init: failed to connect database")
 	}
 
 	statement, err := db.Prepare("PRAGMA foreign_keys = 1")
@@ -20,7 +20,7 @@ func Init() *sql.DB {
 	}
 	statement.Exec()
 
-	// CreateTables()
+	// Creating the required tables
 	statement, err = db.Prepare("CREATE TABLE IF NOT EXISTS users " +
 		"(id INTEGER PRIMARY KEY, firstname TEXT, lastname TEXT, nickname TEXT UNIQUE," +
 		"password TEXT, email TEXT UNIQUE)")

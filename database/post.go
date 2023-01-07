@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// Creates row in posts table by post structure.
 func (post *Post) Create(db *sql.DB) (err error) {
 	statement := "INSERT INTO posts (title, message, author, user_id) VALUES ($1, $2, $3, $4) returning id"
 	stmt, err := db.Prepare(statement)
@@ -24,11 +25,13 @@ func (post *Post) Create(db *sql.DB) (err error) {
 	return
 }
 
+// Deletes row from posts table by post structure.
 func (post *Post) Delete(db *sql.DB) (err error) {
 	_, err = db.Exec("DELETE FROM posts where id = $1", post.Id)
 	return
 }
 
+// Gets posts structure by post id.
 func GetPost(db *sql.DB, id int) (post Post, err error) {
 	post = Post{}
 	err = db.QueryRow("SELECT id, title, message, author FROM posts WHERE id = $1",

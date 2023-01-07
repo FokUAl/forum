@@ -6,6 +6,7 @@ import (
 	"fmt"
 )
 
+// Creates a row in the Comments table for this "comment" structure.
 func (comment *Comment) Create(db *sql.DB) (err error) {
 	if comment.Post_Id == 0 {
 		err = errors.New("Post not found")
@@ -17,11 +18,13 @@ func (comment *Comment) Create(db *sql.DB) (err error) {
 	return
 }
 
+// Deletes a row in the Comments table for this "comment" structure.
 func (comment *Comment) Delete(db *sql.DB) (err error) {
 	_, err = db.Exec("DELETE FROM comments where id = $1", comment.Id)
 	return
 }
 
+// Returns the "comment" structure from the database by its ID.
 func GetComment(db *sql.DB, id int) (comment Comment, err error) {
 	err = db.QueryRow("SELECT content, author, post_id FROM comments WHERE id = $1",
 		id).Scan(&comment.Content, &comment.Author, &comment.Post_Id)
@@ -35,6 +38,7 @@ func (comment *Comment) Update(db *sql.DB, newComment string) (err error) {
 	return
 }
 
+// Returns an array of "comment" structures from the database by the post ID.
 func GetAllCommentsByPost(db *sql.DB, post_id int) ([]Comment, error) {
 	var result []Comment
 

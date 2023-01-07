@@ -1,7 +1,5 @@
 package main
 
-//"forumAA/web"
-
 import (
 	"fmt"
 	"forumAA/web"

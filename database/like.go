@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// Takes the likes of all users to a certain post.
 func GetLikeByPost(db *sql.DB, post_id int) ([]Like, error) {
 	result := []Like{}
 	statement := "SELECT id, nickname, like FROM post_likes WHERE post_id = $1"
@@ -31,6 +32,7 @@ func GetLikeByPost(db *sql.DB, post_id int) ([]Like, error) {
 	return result, nil
 }
 
+// Takes a certain user's like to one post.
 func GetPostLikeByUser(db *sql.DB, nickname string, post_id int) (Like, error) {
 	result := Like{}
 
@@ -47,6 +49,7 @@ func GetPostLikeByUser(db *sql.DB, nickname string, post_id int) (Like, error) {
 	return result, nil
 }
 
+// Changes the value of the post's like in the table for the user.
 func UpdatePostLike(db *sql.DB, new_value int, nickname string, post_id int) error {
 	_, err := db.Exec("UPDATE post_likes SET like = $1 "+
 		"WHERE nickname = $2 AND post_id = $3",
@@ -55,6 +58,7 @@ func UpdatePostLike(db *sql.DB, new_value int, nickname string, post_id int) err
 	return err
 }
 
+// Creates a row in the likes table for a post
 func CreatePostLike(db *sql.DB, nickname string, like int, post_id int) error {
 	statement := "INSERT INTO post_likes (nickname, like, post_id) VALUES ($1, $2, $3) returning id"
 	stmt, err := db.Prepare(statement)
@@ -68,6 +72,7 @@ func CreatePostLike(db *sql.DB, nickname string, like int, post_id int) error {
 	return err
 }
 
+// Returns a single user's like from the likes table for comments
 func GetCommentLikeByUser(db *sql.DB, nickname string, comment_id int) (Like, error) {
 	result := Like{}
 
@@ -84,6 +89,7 @@ func GetCommentLikeByUser(db *sql.DB, nickname string, comment_id int) (Like, er
 	return result, nil
 }
 
+// Returns all user likes by comment
 func GetLikeByComment(db *sql.DB, comment_id int) ([]Like, error) {
 	result := []Like{}
 
@@ -111,6 +117,7 @@ func GetLikeByComment(db *sql.DB, comment_id int) ([]Like, error) {
 	return result, nil
 }
 
+// Changes the value of a single user's like for a comment
 func UpdateCommentLike(db *sql.DB, new_value int, nickname string, comment_id int) error {
 	_, err := db.Exec("UPDATE comment_likes SET like = $1 "+
 		"WHERE nickname = $2 AND comment_id = $3",
@@ -119,6 +126,7 @@ func UpdateCommentLike(db *sql.DB, new_value int, nickname string, comment_id in
 	return err
 }
 
+// Creates a row in the likes comments table
 func CreateCommentLike(db *sql.DB, nickname string, like int, comment_id int) error {
 	statement := "INSERT INTO comment_likes (nickname, like, comment_id) VALUES ($1, $2, $3) returning id"
 	stmt, err := db.Prepare(statement)
@@ -132,6 +140,7 @@ func CreateCommentLike(db *sql.DB, nickname string, like int, comment_id int) er
 	return err
 }
 
+// Returns the structure of the like made by the user for the post
 func GetPostLikesByUser(db *sql.DB, nickname string) ([]Like, error) {
 	var result []Like
 
@@ -159,6 +168,7 @@ func GetPostLikesByUser(db *sql.DB, nickname string) ([]Like, error) {
 	return result, nil
 }
 
+// Deletes a row from post likes table
 func DeletePostLikes(db *sql.DB, postlike_id int) error {
 	_, err := db.Exec("DELETE FROM post_likes WHERE id = $1",
 		postlike_id)
@@ -166,6 +176,7 @@ func DeletePostLikes(db *sql.DB, postlike_id int) error {
 	return err
 }
 
+// Deletes a row from comment likes table
 func DeleteCommentLike(db *sql.DB, commentlike_id int) error {
 	_, err := db.Exec("DELETE FROM comment_likes WHERE id = $1",
 		commentlike_id)
