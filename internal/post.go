@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+var (
+	ErrTitleEmpty    = fmt.Errorf("Title or message is empty")
+	ErrCategoryEmpty = fmt.Errorf("Category is empty")
+)
+
 func CreatePost(db *sql.DB, user database.User, r *http.Request) error {
 	err := r.ParseForm()
 	if err != nil {
@@ -22,13 +27,13 @@ func CreatePost(db *sql.DB, user database.User, r *http.Request) error {
 	message = strings.Trim(message, " ")
 
 	if title == "" || message == "" {
-		return fmt.Errorf("Title or message is empty")
+		return ErrTitleEmpty
 	}
 
 	for i := 0; i < len(categories); i++ {
 		categories[i] = strings.Trim(categories[i], " ")
 		if categories[i] == "" {
-			return fmt.Errorf("Category is empty")
+			return ErrCategoryEmpty
 		}
 	}
 
