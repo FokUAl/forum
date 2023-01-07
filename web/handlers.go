@@ -89,6 +89,11 @@ func (app *application) profile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if r.URL.Path != "/profile/"+user.Nickname {
+		http.NotFound(w, r)
+		return
+	}
+
 	t, err := template.ParseFiles("./ui/template/profile.html")
 	if err != nil {
 		app.errorLog.Printf("profile: %s\n", err.Error())

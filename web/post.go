@@ -17,8 +17,8 @@ func (app *application) post(w http.ResponseWriter, r *http.Request) {
 	post_id, err := strconv.ParseInt(post_id_str, 10, 32)
 	if err != nil {
 		app.errorLog.Printf("post: %s\n", err.Error())
-		http.Error(w, http.StatusText(http.StatusInternalServerError),
-			http.StatusInternalServerError)
+		http.Error(w, http.StatusText(http.StatusNotFound),
+			http.StatusNotFound)
 		return
 	}
 
