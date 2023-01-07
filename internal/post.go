@@ -23,10 +23,10 @@ func CreatePost(db *sql.DB, user database.User, r *http.Request) error {
 	message := r.FormValue("postMessage")
 	categories := r.Form["postCat"]
 
-	title = strings.Trim(title, " ")
-	message = strings.Trim(message, " ")
+	titleTrimed := strings.Trim(title, " ")
+	messageTrimed := strings.Trim(message, " ")
 
-	if title == "" || message == "" {
+	if titleTrimed == "" || messageTrimed == "" {
 		return ErrTitleEmpty
 	}
 

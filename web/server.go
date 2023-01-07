@@ -59,6 +59,5 @@ func Route(app *application, mux *http.ServeMux, fileServer http.Handler) {
 	mux.HandleFunc("/comment/like/", app.likeComment)
 	mux.HandleFunc("/post/like/", app.likePost)
 
-	mux.Handle("/static", http.NotFoundHandler())
 	mux.Handle("/static/", http.StripPrefix("/static", fileServer))
 }
