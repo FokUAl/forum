@@ -21,7 +21,8 @@ type info struct {
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
-		http.NotFound(w, r)
+		http.Error(w, http.StatusText(http.StatusNotFound),
+			http.StatusNotFound)
 		return
 	}
 
