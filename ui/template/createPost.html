@@ -11,9 +11,13 @@
         <title>Forum</title>
     </head>
     <body>
+        <!-- Background -->
         <div class="bg"></div>
         <div class="bg bg2"></div>
         <div class="bg bg3"></div>
+        <!-- End of Background -->
+
+        <!-- Navigation Menu -->
         <header>
             <div class="logo_reg">
                 <ul class="logo">
@@ -29,9 +33,10 @@
                     </li>
                 </ul>
             </div>
-            
         </header>
-        
+        <!-- End of Navigation Menu -->
+
+        <!-- Form for creating post -->
         <form action="/create-post" method="post" class="create_area" id="post" onsubmit="return validation()">
             <label class="title_label">Creating new post</label>
             <label class="name_label">Title</label>
@@ -49,13 +54,18 @@
             </div>
             <input type="submit" class="submit" value="Create">
         </form>
+        <!-- End of Form -->
 
+        <!-- Footer -->
         <footer>
             <div class="authors">Development by @HgCl2 & @aleebeg & @Alfarabi09</div>
             <div class="year">2022</div>
         </footer>
+        <!-- End of Footer -->
 
+        <!-- JS Scripts -->
         <script>
+            // adding new category, limit to 8
             const addCat = () => {
                 const cats = document.getElementById('cat_container')
                 if (cats.children.length < 9) {
@@ -65,6 +75,8 @@
                     document.getElementById('cat_container').appendChild(clone)
                 }
             }
+            
+            // removing category, limit to 1
             const removeCat = () => {
                 const cats = document.getElementById('cat_container')
                 if (cats.children.length > 1) {
@@ -72,6 +84,7 @@
                 }
             }
 
+            // checking of same categories and spaces in textareas
             const form = document.querySelector('#post');
             const cats = document.getElementsByClassName('cat_textarea')
 
@@ -103,5 +116,6 @@
                 form.submit();
             });
         </script>
+        <!-- End of Scripts -->
     </body>
 </html>

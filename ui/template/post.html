@@ -11,9 +11,14 @@
         <title>Forum</title>
     </head>
     <body>
+
+        <!-- Background -->
         <div class="bg"></div>
         <div class="bg bg2"></div>
         <div class="bg bg3"></div>
+        <!-- End of Background -->
+
+        <!-- Navigation Menu -->
         <header>
             <div class="logo_reg">
                 <ul class="logo">
@@ -36,7 +41,9 @@
                 </ul>
             </div>
         </header>
+        <!-- End of Navigation Menu -->
 
+        <!-- Post Area -->
         <div class="post">
             {{ if .Post }}
             <div class="post_area">
@@ -104,16 +111,23 @@
                 {{end}}
             {{ end }}
         </div>
+        <!-- End of Post Area -->
+
+        <!-- Footer -->
         <footer>
             <div class="authors">Development by @HgCl2 & @aleebeg & @Alfarabi09</div>
             <div class="year">2022</div>
         </footer>
+        <!-- End of Footer -->
 
+        <!-- JS Scripts -->
         <script>
+            // if unlogged user is using rating buttons
             const notAllowed = () => {
                 alert('Sign in first!')
             }
 
+            // checking of fill fields
             const validation = () => {
                 let com = document.forms[1].elements[0].value
                 if (com.trim() === '' || com.trim === null) {
@@ -122,5 +136,6 @@
                 }
             }
         </script>
+        <!-- End of Scripts -->
     </body>
 </html>

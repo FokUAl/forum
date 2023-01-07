@@ -11,9 +11,14 @@
         <title>Forum</title>
     </head>
     <body>
+
+        <!-- Background -->
         <div class="bg"></div>
         <div class="bg bg2"></div>
         <div class="bg bg3"></div>
+        <!-- End of Background -->
+
+        <!-- Navigation Menu -->
         <header>
             <div class="logo_reg">
                 <ul class="logo">
@@ -36,7 +41,9 @@
                 </ul>
             </div>
         </header>
+        <!-- End of Navigation menu -->
 
+        <!-- Search with categories -->
         <form action="/" method="post" class="filter">
             <div class="filter_title">Search for category</div>
             <div class="inputs">
@@ -44,7 +51,9 @@
                 <input type="submit" class="filter_submit" value="Search">
             </div>
         </form>
+        <!-- End of Searching -->
 
+        <!-- Line for existing Posts -->
         <div class="line">
             {{ if .Posts }}
             {{ range .Posts }}
@@ -65,9 +74,13 @@
             <div class="post">No posts yet</div>
             {{ end }}
         </div>
+        <!-- End of Line -->
+
+        <!-- Footer -->
         <footer>
             <div class="authors">Development by @HgCl2 & @aleebeg & @Alfarabi09</div>
             <div class="year">2022</div>
         </footer>
+        <!-- End of Footer -->
     </body>
 </html>

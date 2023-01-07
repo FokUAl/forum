@@ -8,10 +8,14 @@
         <title>Forum</title>
     </head>
     <body>
+
+        <!-- Background -->
         <div class="bg"></div>
         <div class="bg bg2"></div>
         <div class="bg bg3"></div>
+        <!-- End of Background -->
 
+        <!-- Navigation Menu -->
         <header>
             <div class="logo_reg">
                 <ul class="logo">
@@ -29,7 +33,9 @@
                 </ul>
             </div>
         </header>
+        <!-- End of navigation Menu -->
 
+        <!-- User's Information -->
         <div class="main">
             <div class="main_nickname">{{ .User.Nickname }}</div>
             <div class="main_desc">
@@ -38,12 +44,13 @@
                 <div class="main_mail">Email: {{ .User.Email }}</div>
             </div>
         </div>
+        <!-- End of User's Information -->
 
+        <!-- Filters of posts -->
         <div class="tabs">
             <div class="tab_link" onclick="openFilter(event, 'Posts')" id="defaultOpen">Posts</div>
             <div class="tab_link" onclick="openFilter(event, 'Likes')">Likes</div>
         </div>
-
         <div class="tab_content" id="Posts">
             {{ range .Posts }}
             <div class="post">
@@ -61,8 +68,7 @@
             {{ else }}
             <div class="no_posts">You don't have any created posts</div>
             {{ end }}
-        </div>
-
+        </div>        
         <div class="tab_content" id="Likes">
             {{ range .LikedPosts }}
             <div class="post">
@@ -81,13 +87,18 @@
             <div class="no_posts">You didn't like any posts</div>
             {{ end }}
         </div>
+        <!-- End of Filters -->
 
+        <!-- Footer -->
         <footer>
             <div class="authors">Development by @HgCl2 & @aleebeg & @Alfarabi09</div>
             <div class="year">2022</div>
         </footer>
+        <!-- End of Footer -->
 
+        <!-- JS Scripts -->
         <script>
+            // Changing of Filter
             function openFilter(evt, filter) {
             var i, tabcontent, tablinks;
 
@@ -107,5 +118,6 @@
             
             document.getElementById("defaultOpen").click();
         </script>
+        <!-- End of Scripts -->
     </body>
 </html>

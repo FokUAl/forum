@@ -11,9 +11,14 @@
         <title>Forum</title>
     </head>
     <body>
+
+        <!-- Background -->
         <div class="bg"></div>
         <div class="bg bg2"></div>
         <div class="bg bg3"></div>
+        <!-- End of Background -->
+
+        <!-- Navigation Menu -->
         <header>
             <div class="logo_reg">
                 <ul class="logo">
@@ -25,6 +30,9 @@
                 </ul>
             </div>
         </header>
+        <!-- End of Navigation Menu -->
+
+        <!-- Form for sign up -->
         <form action="/sign-up" method="post" class="sign_up">
             <div class="title">Sign Up</div>
             <div class="inputs_up">
@@ -36,15 +44,21 @@
             </div>
             <input class="signup_btn" type="submit" value="Sign Up">
         </form>
+        <!-- End of Form -->
+
+        <!-- Footer -->
         <footer>
             <div class="authors">Development by @HgCl2 & @aleebeg & @Alfarabi09</div>
             <div class="year">2022</div>
         </footer>
+        <!-- End of Footer -->
 
+        <!-- JS Scripts -->
         {{ if .Exist }}
         <script>
                 alert('{{ .Content }}')
         </script>
         {{ end }}
+        <!-- End of Scripts -->
     </body>
 </html>

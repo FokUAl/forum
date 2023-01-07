@@ -11,9 +11,14 @@
         <title>Forum</title>
     </head>
     <body>
+
+        <!-- Background -->
         <div class="bg"></div>
         <div class="bg bg2"></div>
         <div class="bg bg3"></div>
+        <!-- End of background -->
+
+        <!-- Navigation Menu -->
         <header>
             <div class="logo_reg">
                 <ul class="logo">
@@ -24,8 +29,10 @@
                     <li onclick="location.href='./sign-up'" class="sign_link">Sign up</li>
                 </ul>
             </div>
-            
         </header>
+        <!-- End of Navigation Menu -->
+
+        <!-- Form for sing in -->
         <form action="/sign-in" method="post" class="sign_in">
             <div class="title">Sign In</div>
             <div class="inputs_in">
@@ -38,11 +45,14 @@
             <div class="authors">Development by @HgCl2 & @aleebeg & @Alfarabi09</div>
             <div class="year">2022</div>
         </footer>
+        <!-- End of Form -->
 
+        <!-- JS Scripts -->
         {{ if .Exist }}
         <script>
                 alert('{{ .Content }}')
         </script>
         {{ end }}
+        <!-- End of Scripts -->
     </body>
 </html>
