@@ -60,7 +60,7 @@ func (post *Post) Update(db *sql.DB, newTitle, newMessage string) (err error) {
 }
 
 func GetAllPost(db *sql.DB) ([]Post, error) {
-	statement := "SELECT * FROM posts"
+	statement := "SELECT id, title, message, author, user_id FROM posts"
 
 	rows, err := db.Query(statement)
 	if err != nil {
