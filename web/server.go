@@ -40,7 +40,7 @@ func Run(port string) error {
 
 	Route(app, mux, fileServer)
 
-	infoLog.Printf("Launch server on %s", port)
+	infoLog.Printf("Launch server on http://localhost%s", port)
 
 	err := srv.ListenAndServe()
 	errorLog.Fatal(err)
